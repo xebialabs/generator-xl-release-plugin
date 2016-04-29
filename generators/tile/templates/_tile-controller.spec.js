@@ -1,7 +1,7 @@
 describe('<%= controllerName %>', function () {
-  beforeEach(module('<%= moduleName %>'));
+    beforeEach(module('<%= moduleName %>'));
 
-  it('YOU should fix me!', function () {
-    expect(0).toBe(1);
-  });
+    it('YOU should fix me!', function () {
+        expect(0).toBe(1);
+    });
 });
