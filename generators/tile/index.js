@@ -91,11 +91,11 @@ module.exports = generators.Base.extend({
         this.log(util.logCreate(path.join(tileIncludePath, 'img')));
 
         var moduleName = `xlrelease.${this.tileNamespace}.${util.lowerCaseCompact(this.tileName)}`; // xlrelease.jira.jiratile
-        var kebabModuleName = _.kebabCase(this.tileName); // JiraTask -> jira-task
+        var kebabTileName = _.kebabCase(this.tileName); // JiraTask -> jira-task
 
         this.fs.copyTpl(
             this.templatePath('_tile-app.js'),
-            this.destinationPath(path.join(tileIncludePath, 'js', `${kebabModuleName}-app.js`)),
+            this.destinationPath(path.join(tileIncludePath, 'js', `${kebabTileName}-app.js`)),
             {moduleName: moduleName}
         );
 
@@ -119,20 +119,22 @@ module.exports = generators.Base.extend({
 
         this.fs.copyTpl(
             this.templatePath('_tile.css'),
-            this.destinationPath(path.join(tileIncludePath, 'css', `${kebabModuleName}.css`)),
-            {}
+            this.destinationPath(path.join(tileIncludePath, 'css', `${kebabTileName}.css`)),
+            { kebabTileName: kebabTileName }
         );
 
         this.fs.copyTpl(
             this.templatePath('_tile-summary-view.html'),
-            this.destinationPath(path.join(tileIncludePath, `${kebabModuleName}-summary-view.html`)),
-            {}
+            this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-summary-view.html`)),
+            { kebabTileName: kebabTileName }
         );
 
         this.fs.copyTpl(
             this.templatePath('_tile-details-view.html'),
-            this.destinationPath(path.join(tileIncludePath, `${kebabModuleName}-details.view.html`)),
+            this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details.view.html`)),
             {}
         );
+
+        // TODO add new type to synthetic.xml...
     }
 });

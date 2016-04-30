@@ -172,5 +172,14 @@ module.exports = generators.Base.extend({
 
     install: function () {
         this.npmInstall();
+    },
+
+    end: function () {
+        this._printPropertiesInstructions();
+
+    },
+
+    _printPropertiesInstructions: function () {
+        // TODO
     }
 });

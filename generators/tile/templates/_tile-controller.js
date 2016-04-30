@@ -1,12 +1,13 @@
 (function () {
-  'use strict';
+    'use strict';
 
-  function <%= controllerName %>() {
-    var vm = this;
-  }
+    function <%= controllerName %>() {
+        var vm = this;
+        vm.title = '<%= controllerName %>';
+    }
 
-  <%= controllerName %>.$inject = [];
+    <%= controllerName %>.$inject = [];
 
-  angular.module('<%= moduleName %>')
-    .controller('<%= controllerName %>', <%= controllerName %>);
+    angular.module('<%= moduleName %>')
+        .controller('<%= controllerName %>', <%= controllerName %>);
 })();
