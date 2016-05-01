@@ -73,14 +73,14 @@ module.exports = generators.Base.extend({
         mkdirp(tileFullPath);
         this.log(util.logCreate(tileFullPath));
 
-        var scriptName = _.upperFirst(_.camelCase(this.tileName));
+        var pascalTileName = _.upperFirst(_.camelCase(this.tileName));
         this.fs.copyTpl(
             this.templatePath('_TileScript.py'),
-            this.destinationPath(path.join(tileFullPath), `${scriptName}.py`),
+            this.destinationPath(path.join(tileFullPath), `${pascalTileName}.py`),
             {}
         );
 
-        var tileIncludePath = path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, scriptName);
+        var tileIncludePath = path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, this.tilePath, pascalTileName);
         mkdirp(tileIncludePath);
         this.log(util.logCreate(tileIncludePath));
         mkdirp(path.join(tileIncludePath, 'js'));
@@ -139,9 +139,9 @@ module.exports = generators.Base.extend({
             path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
             file: 'synthetic.xml',
             type: [
-                `<type type="${this.tileNamespace}.${scriptName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
-                `    <property name="uri" hidden="true" default="${tileIncludePath}/${kebabTileName}-summary-view.html" />`,
-                `    <property name="detailsUri" hidden="true" default="${tileIncludePath}/${kebabTileName}-details.html" />`,
+                `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
+                `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
+                `    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details.html" />`,
                 `    <property name="title" description="Tile title" default="${this.tileName}"/>`,
                 '    <!-- Add tile properties here! -->',
                 '</type>'
