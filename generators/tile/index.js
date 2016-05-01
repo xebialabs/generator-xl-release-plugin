@@ -120,13 +120,13 @@ module.exports = generators.Base.extend({
         this.fs.copyTpl(
             this.templatePath('_tile.css'),
             this.destinationPath(path.join(tileIncludePath, 'css', `${kebabTileName}.css`)),
-            { kebabTileName: kebabTileName }
+            {kebabTileName: kebabTileName}
         );
 
         this.fs.copyTpl(
             this.templatePath('_tile-summary-view.html'),
             this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-summary-view.html`)),
-            { kebabTileName: kebabTileName }
+            {controllerName, kebabTileName}
         );
 
         this.fs.copyTpl(
@@ -135,6 +135,19 @@ module.exports = generators.Base.extend({
             {}
         );
 
-        // TODO add new type to synthetic.xml...
+        var config = {
+            path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
+            file: 'synthetic.xml',
+            type: [
+                `<type type="${this.tileNamespace}.${scriptName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
+                `    <property name="uri" hidden="true" default="${tileIncludePath}/${kebabTileName}-summary-view.html" />`,
+                `    <property name="detailsUri" hidden="true" default="${tileIncludePath}/${kebabTileName}-details.html" />`,
+                `    <property name="title" description="Tile title" default="${this.tileName}"/>`,
+                '    <!-- Add tile properties here! -->',
+                '</type>'
+            ]
+        };
+
+        util.appendType(config);
     }
 });
