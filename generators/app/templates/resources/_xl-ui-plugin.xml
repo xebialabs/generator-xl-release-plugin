@@ -2,8 +2,6 @@
         xmlns="http://www.xebialabs.com/deployit/ui-plugin"
         xsi:schemaLocation="http://www.xebialabs.com/deployit/ui-plugin xl-ui-plugin.xsd">
 
-    <library name="<%= kebabPluginName %>"/>
-
     <!-- Add a custom main menu -->
     <!-- Add a custom release page -->
 

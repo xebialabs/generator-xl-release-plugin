@@ -110,7 +110,7 @@ module.exports = XlrGenerator.extend({
         this.fs.copyTpl(
             this.templatePath('_tile-controller.js'),
             this.destinationPath(path.join(tileIncludePath, 'js', `${_.kebabCase(controllerName)}.js`)),
-            {moduleName, controllerName}
+            {moduleName: moduleName, controllerName: controllerName}
         );
 
         if (this.testFrameworks.indexOf('karma') > -1) {
@@ -148,7 +148,7 @@ module.exports = XlrGenerator.extend({
             type: [
                 `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
                 `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
-                `    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details.html" />`,
+                `    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details-view.html" />`,
                 `    <property name="title" description="Tile title" default="${this.tileName}"/>`,
                 '    <!-- Add tile properties here! -->',
                 '</type>'
@@ -156,5 +156,15 @@ module.exports = XlrGenerator.extend({
         };
 
         xlrUtil.appendType(config);
+
+        var xlUiAppendConfig = {
+            path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
+            file: 'xl-ui-plugin.xml',
+            needle: '</plugin>',
+            type: [
+                `<library name="${moduleName}"/>`
+            ]
+        };
+        xlrUtil.appendType(xlUiAppendConfig);
     }
 });

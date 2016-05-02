@@ -143,8 +143,7 @@ module.exports = generators.Base.extend({
             if (this.extXmls.indexOf('xl-ui-plugin') > -1) {
                 this.fs.copyTpl(
                     this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.RESOURCES}/_xl-ui-plugin.xml`),
-                    this.destinationPath(`${CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES}/xl-ui-plugin.xml`),
-                    {kebabPluginName: this.kebabPluginName}
+                    this.destinationPath(`${CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES}/xl-ui-plugin.xml`)
                 );
             }
         },
