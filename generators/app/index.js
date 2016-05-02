@@ -44,8 +44,7 @@ module.exports = generators.Base.extend({
             this.prompt({
                 type: 'input',
                 name: 'namespace',
-                message: 'Default namespace',
-                store: true
+                message: 'Default namespace'
             }, function (answers) {
                 this.namespace = answers.namespace;
                 done();

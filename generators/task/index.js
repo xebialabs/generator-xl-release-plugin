@@ -1,13 +1,18 @@
 // Task subgenerator
 var fs = require('fs');
 var path = require('path');
+var util = require('util');
 var generators = require('yeoman-generator');
 var mkdirp = require('mkdirp');
 var _ = require('lodash');
 var CONSTANTS = require('../constants');
-var util = require('../util');
+var BaseGenerator = require('../base-generator');
+var xlrUtil = require('../util');
 
-module.exports = generators.Base.extend({
+var XlrGenerator = generators.Base.extend({});
+util.inherits(XlrGenerator, BaseGenerator);
+
+module.exports = XlrGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
         this.testFrameworks = [];
@@ -74,6 +79,7 @@ module.exports = generators.Base.extend({
             // create directory...
             var taskFullPath = path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, this.taskPath);
             mkdirp(taskFullPath);
+            this.logCreate(taskFullPath);
 
             var scriptName = _.upperFirst(_.camelCase(this.taskName));
             this.fs.copyTpl(
@@ -87,12 +93,12 @@ module.exports = generators.Base.extend({
                 file: 'synthetic.xml',
                 type: [
                     `<type type="${this.taskNamespace}.${scriptName}"${this.virtual ? ' virtual="true"' : ''} extends="${this.baseType}">`,
-                    _.repeat(' ', 4) + '<!-- Add task properties here! -->',
+                    '    <!-- Add task properties here! -->',
                     '</type>'
                 ]
             };
 
-            util.appendType(config);
+            xlrUtil.appendType(config);
         }
     }
 });

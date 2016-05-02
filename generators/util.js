@@ -61,15 +61,6 @@ function namespaceToPath(namespace) {
     });
 }
 
-/**
- * Generates a create log message.
- *
- * @return {String} message
- */
-function logCreate() {
-    return chalk.green('create') + ' ' + _.join(arguments, ' ');
-}
-
 function lowerCaseCompact(str) {
     return _.toLower(_.camelCase(str));
 }
@@ -77,6 +68,5 @@ function lowerCaseCompact(str) {
 module.exports = {
     appendType: appendType,
     namespaceToPath: namespaceToPath,
-    logCreate: logCreate,
     lowerCaseCompact: lowerCaseCompact
 };
