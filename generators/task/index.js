@@ -16,6 +16,7 @@ module.exports = generators.Base.extend({
 
     initializing: {
         loadConfig: function () {
+            this.namespace = this.config.get('namespace');
             this.testFrameworks = this.config.get('testFrameworks');
         }
     },
@@ -40,6 +41,7 @@ module.exports = generators.Base.extend({
                 type: 'input',
                 name: 'taskNamespace',
                 message: 'Task namespace',
+                default: this.namespace,
                 store: false
             }, (answers => {
                 this.taskNamespace = answers.taskNamespace;

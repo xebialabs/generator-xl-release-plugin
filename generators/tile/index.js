@@ -16,6 +16,7 @@ module.exports = generators.Base.extend({
     initializing: {
         loadConfig: function () {
             this.pluginName = this.config.get('pluginName');
+            this.namespace = this.config.get('namespace');
             this.testFrameworks = this.config.get('testFrameworks');
         }
     },
@@ -34,12 +35,13 @@ module.exports = generators.Base.extend({
             }.bind(this));
         },
 
-        namespace: function () {
+        tileNamespace: function () {
             var done = this.async();
             this.prompt({
                 type: 'input',
                 name: 'tileNamespace',
                 message: 'Tile namespace',
+                default: this.namespace,
                 store: false
             }, function (answers) {
                 this.tileNamespace = answers.tileNamespace;

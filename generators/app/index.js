@@ -16,7 +16,7 @@ module.exports = generators.Base.extend({
         readConfig: function () {
             this.pluginName = this.config.set('pluginName');
             this.kebabPluginName = this.config.set('kebabPluginName');
-            this.xlrVersion = this.config.set('xlrVersion');
+            this.namespace = this.config.set('namespace');
             this.extXmls = this.config.set('extXmls');
             this.testFrameworks = this.config.set('testFrameworks');
         }
@@ -39,15 +39,15 @@ module.exports = generators.Base.extend({
             }.bind(this));
         },
 
-        xlrVersion: function () {
+        namespace: function () {
             var done = this.async(); // this is not the preferred way of Inquirer but is of Yeoman?
             this.prompt({
                 type: 'input',
-                name: 'xlrVersion',
-                message: 'XL Release Version',
+                name: 'namespace',
+                message: 'Default namespace',
                 store: true
             }, function (answers) {
-                this.xlrVersion = answers.xlrVersion;
+                this.namespace = answers.namespace;
                 done();
             }.bind(this));
         },
@@ -81,12 +81,16 @@ module.exports = generators.Base.extend({
         }
     },
 
+    configuring: {
+      // TODO add composeWith child generators!!!
+    },
+
     default: {
         // save user input for future?
         saveConfig: function () {
             this.config.set('pluginName', this.pluginName);
             this.config.set('kebabPluginName', this.kebabPluginName);
-            this.config.set('xlrVersion', this.xlrVersion);
+            this.config.set('namespace', this.namespace);
             this.config.set('extXmls', this.extXmls);
             this.config.set('testFrameworks', this.testFrameworks);
         }
