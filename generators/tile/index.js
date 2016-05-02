@@ -1,4 +1,4 @@
-// Task subgenerator
+// Tile subgenerator
 var path = require('path');
 var util = require('util');
 var mkdirp = require('mkdirp');
@@ -55,7 +55,7 @@ module.exports = XlrGenerator.extend({
             }.bind(this));
         },
 
-        label: function () {
+        tileLabel: function () {
             var done = this.async();
             this.prompt({
                 type: 'input',
@@ -66,12 +66,6 @@ module.exports = XlrGenerator.extend({
                 this.tileLabel = answers.tileLabel;
                 done();
             }.bind(this));
-        }
-    },
-
-    default: {
-        saveConfig: function () {
-            // do I have anything to save?
         }
     },
 
@@ -138,8 +132,8 @@ module.exports = XlrGenerator.extend({
 
         this.fs.copyTpl(
             this.templatePath('_tile-details-view.html'),
-            this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details.view.html`)),
-            {}
+            this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details-view.html`)),
+            {controllerName, kebabTileName}
         );
 
         var config = {
@@ -154,16 +148,13 @@ module.exports = XlrGenerator.extend({
                 '</type>'
             ]
         };
-
         xlrUtil.appendType(config);
 
         var xlUiAppendConfig = {
             path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
             file: 'xl-ui-plugin.xml',
             needle: '</plugin>',
-            type: [
-                `<library name="${moduleName}"/>`
-            ]
+            type: [`<library name="${moduleName}"/>`]
         };
         xlrUtil.appendType(xlUiAppendConfig);
     }

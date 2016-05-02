@@ -1,0 +1,14 @@
+{
+  "generator-xl-release-plugin": {
+    "pluginName": "xlr-test-plugin",
+    "kebabPluginName": "xlr-test-plugin",
+    "namespace": "test",
+    "extXmls": [
+      "xl-rest-endpoints",
+      "xl-ui-plugin"
+    ],
+    "testFrameworks": [
+      "karma"
+    ]
+  }
+}
