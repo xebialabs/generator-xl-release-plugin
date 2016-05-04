@@ -1,0 +1,52 @@
+/* Gradle plugins used in this project */
+buildscript {
+  dependencies {
+    classpath 'com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:0.0.1-rc.2'
+  }
+  repositories {
+    maven {
+      credentials {
+        username project.property("nexusUserName")
+        password project.property("nexusPassword")
+      }
+      url "${project.property('nexusBaseUrl')}/repositories/releases"
+    }
+  }
+}
+
+plugins {
+  id 'java'
+  id 'com.moowork.node' version '0.12'
+  id "org.ajoberstar.release-opinion" version "1.4.2"
+}
+apply plugin: 'xebialabs.xl-release.plugin'
+
+/* Configuration of Node */
+node {
+  version = '5.7.1'
+  npmVersion = '3.6.0'
+  download = true
+}
+
+/* Configuration of release task */
+release {
+  grgit = org.ajoberstar.grgit.Grgit.open()
+}
+tasks.release.dependsOn tasks.clean
+tasks.prepare.mustRunAfter tasks.clean
+
+/* Configure XL Release Gradle plugin */
+xlReleasePlugin {
+  // This enables or disables hot reloading of web and Jython sources
+  useSourcesDirectly = true
+}
+
+
+/* Configure this project */
+group 'com.xebialabs.xlrelease.<%= kebabPluginName %>' // YO: replace 'com.xebialabs.xlrelease.sample' with plugin namespace
+
+//dependencies {
+//  xlReleaseAdditionalClasspath('additional-jars-required-by-this-xlr-plugin')
+//}
+// Uncomment following line if you implement Java/Scala code depending on XL Release classes
+//configurations.compile.extendsFrom configurations.xlReleaseJars

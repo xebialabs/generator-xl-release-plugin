@@ -17,7 +17,7 @@ const BASE_TILE_TYPES = [
 ];
 
 // template paths
-const BUILD = 'build';
+const BUILD = 'gradlebuild';
 const RESOURCES = 'resources';
 const NPM = 'npm';
 const KARMA = 'karma';
