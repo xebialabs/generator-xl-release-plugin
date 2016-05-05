@@ -17,7 +17,7 @@ buildscript {
 plugins {
   id 'java'
   id 'com.moowork.node' version '0.12'
-  id "org.ajoberstar.release-opinion" version "1.4.2"
+//  id "org.ajoberstar.release-opinion" version "1.4.2"
 }
 apply plugin: 'xebialabs.xl-release.plugin'
 
@@ -29,11 +29,13 @@ node {
 }
 
 /* Configuration of release task */
+/*
 release {
   grgit = org.ajoberstar.grgit.Grgit.open()
 }
 tasks.release.dependsOn tasks.clean
 tasks.prepare.mustRunAfter tasks.clean
+*/
 
 /* Configure XL Release Gradle plugin */
 xlReleasePlugin {
@@ -44,6 +46,24 @@ xlReleasePlugin {
 
 /* Configure this project */
 group 'com.xebialabs.xlrelease.<%= kebabPluginName %>' // YO: replace 'com.xebialabs.xlrelease.sample' with plugin namespace
+
+<% if (testFrameworks.indexOf('unittest') > -1) { %>
+sourceSets.main.resources.srcDirs = ["src/main/jython", "src/main/resources"]
+sourceSets.test.resources.srcDirs = ["src/test/jython", "src/test/resources"]
+
+task cleanUpTestJython(type: Delete) {
+  delete fileTree(dir: "$projectDir/src/test/jython", include: "**/*.class")
+}
+
+task testJython(type: Exec, dependsOn: ['testClasses']) {
+  environment = ["CLASSPATH": sourceSets.test.runtimeClasspath.asPath, "PATH": System.getenv("PATH"), "HOME": System.getenv("HOME")]
+  commandLine 'jython', "$projectDir/src/test/jython/xlunittestrunner/runtests.py", "$projectDir/src/test/jython", buildDir
+}
+
+testJython.finalizedBy cleanUpTestJython
+
+test.dependsOn testJython
+<% } %>
 
 //dependencies {
 //  xlReleaseAdditionalClasspath('additional-jars-required-by-this-xlr-plugin')

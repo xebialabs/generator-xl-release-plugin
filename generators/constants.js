@@ -4,7 +4,7 @@ var path = require('path');
 const EXT_XMLS = ['xl-rest-endpoints', 'xl-ui-plugin'];
 
 // test frameworks to use
-const TEST_FRAMEWORKS = ['karma'];
+const TEST_FRAMEWORKS = ['karma', 'unittest'];
 
 // base task types
 const BASE_TASK_TYPES = [
@@ -21,11 +21,13 @@ const BUILD = 'gradlebuild';
 const RESOURCES = 'resources';
 const NPM = 'npm';
 const KARMA = 'karma';
+const UNITTEST = 'unittest';
 const APP_TEMPLATE_PATHS = {
     BUILD,
     RESOURCES,
     NPM,
-    KARMA
+    KARMA,
+    UNITTEST
 };
 
 // task paths
@@ -39,6 +41,8 @@ const SRC = 'src';
 const MAIN = path.join(SRC, 'main');
 const TEST = path.join(SRC, 'test');
 const MAIN_RESOURCES = path.join(MAIN, 'resources');
+const TEST_JYTHON_UNIT = path.join(TEST, 'jython');
+const TEST_JYTHON_UNIT_RUNNER = path.join(TEST_JYTHON_UNIT, 'xlunittestrunner');
 const TEST_JS_UNIT = path.join(TEST, 'javascript', 'unit');
 const WEB = path.join(MAIN_RESOURCES, 'web');
 const WEB_INCLUDE = path.join(WEB, 'include');
@@ -48,7 +52,9 @@ const PLUGIN_PATHS = {
     WEB,
     WEB_INCLUDE,
     TEST,
-    TEST_JS_UNIT
+    TEST_JS_UNIT,
+    TEST_JYTHON_UNIT,
+    TEST_JYTHON_UNIT_RUNNER
 };
 
 module.exports = {

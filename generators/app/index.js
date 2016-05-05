@@ -1,10 +1,17 @@
+var path = require('path');
+var util = require('util');
 var generators = require('yeoman-generator');
 var mkdirp = require('mkdirp');
 var _ = require('lodash');
 var chalk = require('chalk');
 var CONSTANTS = require('../constants');
+var BaseGenerator = require('../base-generator');
 
-module.exports = generators.Base.extend({
+
+var XlrGenerator = generators.Base.extend({});
+util.inherits(XlrGenerator, BaseGenerator);
+
+module.exports = XlrGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
         this.extXmls = {};
@@ -81,7 +88,7 @@ module.exports = generators.Base.extend({
     },
 
     configuring: {
-      // TODO add composeWith child generators!!!
+        // TODO add composeWith child generators!!!
     },
 
     default: {
@@ -118,7 +125,7 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(
                 this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.BUILD}/_build.gradle`),
                 this.destinationPath('build.gradle'),
-                {kebabPluginName: this.kebabPluginName}
+                {kebabPluginName: this.kebabPluginName, testFrameworks: this.testFrameworks}
             );
         },
 
@@ -167,6 +174,19 @@ module.exports = generators.Base.extend({
                 this.fs.copy(
                     this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.KARMA}/_karma.conf.js`),
                     this.destinationPath('karma.conf.js')
+                );
+            }
+        },
+
+        unittest: function () {
+            if (this.testFrameworks.indexOf('unittest') > -1) {
+                mkdirp(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT);
+                this.logCreate(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT);
+                mkdirp(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER);
+                this.logCreate(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER);
+                this.fs.copy(
+                    this.templatePath(path.join(CONSTANTS.APP_TEMPLATE_PATHS.UNITTEST, 'runtests.py')),
+                    this.destinationPath(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER, 'runtests.py'))
                 );
             }
         }
