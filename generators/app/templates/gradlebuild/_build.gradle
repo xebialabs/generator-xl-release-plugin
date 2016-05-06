@@ -17,7 +17,7 @@ buildscript {
 plugins {
   id 'java'
   id 'com.moowork.node' version '0.12'
-//  id "org.ajoberstar.release-opinion" version "1.4.2"
+//  id "org.ajoberstar.release-opinion" version "1.4.2" // If you want to use the git release plugin uncomment this line
 }
 apply plugin: 'xebialabs.xl-release.plugin'
 
@@ -28,6 +28,8 @@ node {
   download = true
 }
 
+
+// If you want to use the git release plugin uncomment the next section
 /* Configuration of release task */
 /*
 release {

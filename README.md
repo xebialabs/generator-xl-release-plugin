@@ -25,10 +25,11 @@ You will be asked a series of questions regarding your new plugin:
 * `? Your plugin name`
 * `? Default namespace`
 * `? Generate additional extensions XMLs?`
+* `? Which test frameworks to use?`
 
 After answering all questions a basic plugin will be created. 
 
-Depending on the features previously selected the newly generated plugin may or may not contain the following feature:
+Depending on the features previously selected the newly generated plugin may or may not contain the following test frameworks:
 
 * karma  
 * unittest (Jython)
@@ -43,7 +44,6 @@ You will be asked a series of questions regarding your new task:
 
 * `? Task name`
 * `? Tile namespace`
-* `? Is task virtual?`
 
 After answering all questions a basic file / folder structure will be created.
 
@@ -58,6 +58,7 @@ You will be asked a series of questions regarding your new task:
 * `? Your tile name`
 * `? Tile namespace`
 * `? Tile label`
+* `? Add details view?`
 
 After answering all questions a basic file / folder structure will be created.
 

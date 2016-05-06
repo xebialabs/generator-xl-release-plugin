@@ -53,19 +53,6 @@ module.exports = XlrGenerator.extend({
                 this.taskPath = _.replace(this.taskNamespace, '.', '/');
                 done();
             }).bind(this));
-        },
-
-        virtual: function () {
-            var done = this.async();
-            this.prompt({
-                type: 'confirm',
-                name: 'virtual',
-                message: 'Is task virtual?',
-                default: false
-            }, (answers => {
-                this.virtual = answers.virtual;
-                done();
-            }));
         }
     },
 
@@ -92,8 +79,8 @@ module.exports = XlrGenerator.extend({
                 path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
                 file: 'synthetic.xml',
                 type: [
-                    `<type type="${this.taskNamespace}.${scriptName}"${this.virtual ? ' virtual="true"' : ''} extends="${this.baseType}">`,
-                    '    <!-- Add task properties here! -->',
+                    `<type type="${this.taskNamespace}.${scriptName}" extends="${this.baseType}">`,
+                    '    <!-- Add task properties here -->',
                     '</type>'
                 ]
             };

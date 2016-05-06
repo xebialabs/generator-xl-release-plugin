@@ -66,6 +66,19 @@ module.exports = XlrGenerator.extend({
                 this.tileLabel = answers.tileLabel;
                 done();
             }.bind(this));
+        },
+
+        tileDetailsView: function () {
+            var done = this.async();
+            this.prompt({
+                type: 'confirm',
+                name: 'tileDetailsView',
+                message: 'Add details view?',
+                store: false
+            }, function (answers) {
+                this.tileDetailsView = answers.tileDetailsView;
+                done();
+            }.bind(this));
         }
     },
 
@@ -130,23 +143,30 @@ module.exports = XlrGenerator.extend({
             {controllerName, kebabTileName}
         );
 
-        this.fs.copyTpl(
-            this.templatePath('_tile-details-view.html'),
-            this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details-view.html`)),
-            {controllerName, kebabTileName}
-        );
+        if (this.tileDetailsView) {
+            this.fs.copyTpl(
+              this.templatePath('_tile-details-view.html'),
+              this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details-view.html`)),
+              {controllerName, kebabTileName}
+            );
+        }
+
+        var type = [
+            `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
+            `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
+            `    <property name="title" description="Display name of the tile" default="${this.tileName}"/>`,
+            '    <!-- Add tile properties here -->',
+            '</type>'
+        ];
+
+        if (this.tileDetailsView) {
+          type.splice(2, 0, [`    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details-view.html" />`]);
+        }
 
         var config = {
             path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
             file: 'synthetic.xml',
-            type: [
-                `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
-                `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
-                `    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details-view.html" />`,
-                `    <property name="title" description="Tile title" default="${this.tileName}"/>`,
-                '    <!-- Add tile properties here! -->',
-                '</type>'
-            ]
+            type: type
         };
         xlrUtil.appendType(config);
 

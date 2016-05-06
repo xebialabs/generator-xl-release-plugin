@@ -88,7 +88,7 @@ describe('XL Release plugin generator - Task', function () {
     it('generates task script and updates synthetic', function () {
         assert.file(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'hello', 'HelloTask.py'));
         assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'synthetic.xml'),
-            /[\s\S]*<type type="hello\.HelloTask" extends="xlrelease\.PythonScript">[\s]+<!-- Add task properties here! -->[\s]+<\/type>[\s\S]*/);
+            /[\s\S]*<type type="hello\.HelloTask" extends="xlrelease\.PythonScript">[\s]+<!-- Add task properties here -->[\s]+<\/type>[\s\S]*/);
     });
 });
 
