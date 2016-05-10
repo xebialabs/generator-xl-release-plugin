@@ -104,20 +104,17 @@ module.exports = XlrGenerator.extend({
         mkdirp(path.join(tileIncludePath, 'img'));
         this.logCreate(path.join(tileIncludePath, 'img'));
 
-        var moduleName = `xlrelease.${this.tileNamespace}.${xlrUtil.lowerCaseCompact(this.tileName)}`; // xlrelease.jira.jiratile
         var kebabTileName = _.kebabCase(this.tileName); // JiraTask -> jira-task
-
-        this.fs.copyTpl(
-            this.templatePath('_tile-app.js'),
-            this.destinationPath(path.join(tileIncludePath, 'js', `${kebabTileName}-app.js`)),
-            {moduleName: moduleName}
-        );
-
+        var moduleName = `xlrelease.${this.tileNamespace}.${xlrUtil.lowerCaseCompact(this.tileName)}`; // xlrelease.jira.jiratile
         var controllerName = this.tileName + 'Controller';
+
         this.fs.copyTpl(
-            this.templatePath('_tile-controller.js'),
-            this.destinationPath(path.join(tileIncludePath, 'js', `${_.kebabCase(controllerName)}.js`)),
-            {moduleName: moduleName, controllerName: controllerName}
+            this.templatePath('_tile.js'),
+            this.destinationPath(path.join(tileIncludePath, 'js', `${kebabTileName}.js`)),
+            {
+                moduleName: moduleName,
+                controllerName: controllerName
+            }
         );
 
         if (this.testFrameworks.indexOf('karma') > -1) {
@@ -127,7 +124,10 @@ module.exports = XlrGenerator.extend({
             this.fs.copyTpl(
                 this.templatePath('_tile-controller.spec.js'),
                 this.destinationPath(path.join(testPath, `${_.kebabCase(controllerName)}.spec.js`)),
-                {moduleName, controllerName}
+                {
+                    moduleName: moduleName,
+                    controllerName: controllerName
+                }
             );
         }
 
@@ -145,9 +145,9 @@ module.exports = XlrGenerator.extend({
 
         if (this.tileDetailsView) {
             this.fs.copyTpl(
-              this.templatePath('_tile-details-view.html'),
-              this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details-view.html`)),
-              {controllerName, kebabTileName}
+                this.templatePath('_tile-details-view.html'),
+                this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details-view.html`)),
+                {controllerName, kebabTileName}
             );
         }
 
@@ -155,12 +155,13 @@ module.exports = XlrGenerator.extend({
             `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
             `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
             `    <property name="title" description="Display name of the tile" default="${this.tileName}"/>`,
+            '    <property category="input" name="greetingName" required="true" description="The name to say hello to." />',
             '    <!-- Add tile properties here -->',
             '</type>'
         ];
 
         if (this.tileDetailsView) {
-          type.splice(2, 0, [`    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details-view.html" />`]);
+            type.splice(2, 0, [`    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details-view.html" />`]);
         }
 
         var config = {
