@@ -88,7 +88,6 @@ module.exports = XlrGenerator.extend({
     },
 
     configuring: {
-        // TODO add composeWith child generators!!!
     },
 
     default: {
@@ -202,6 +201,5 @@ module.exports = XlrGenerator.extend({
     },
 
     _printPropertiesInstructions: function () {
-        // TODO
     }
 });

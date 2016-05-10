@@ -47,7 +47,15 @@ xlReleasePlugin {
 
 
 /* Configure this project */
-group 'com.xebialabs.xlrelease.<%= kebabPluginName %>' // YO: replace 'com.xebialabs.xlrelease.sample' with plugin namespace
+group 'com.xebialabs.xlrelease.<%= kebabPluginName %>'
+
+<% if (testFrameworks.indexOf('karma') > -1) { %>
+task testJS(type: NpmTask) {
+  args = ['test']
+}
+
+test.dependsOn testJS
+<% } %>
 
 <% if (testFrameworks.indexOf('unittest') > -1) { %>
 sourceSets.main.resources.srcDirs = ["src/main/jython", "src/main/resources"]
@@ -59,7 +67,7 @@ task cleanUpTestJython(type: Delete) {
 
 task testJython(type: Exec, dependsOn: ['testClasses']) {
   environment = ["CLASSPATH": sourceSets.test.runtimeClasspath.asPath, "PATH": System.getenv("PATH"), "HOME": System.getenv("HOME")]
-  commandLine 'jython', "$projectDir/src/test/jython/xlunittestrunner/runtests.py", "$projectDir/src/test/jython", buildDir
+  commandLine 'jython', "$projectDir/src/test/jython/xlunittestrunner/runtests.py", "$projectDir/src/test/jython"
 }
 
 testJython.finalizedBy cleanUpTestJython
