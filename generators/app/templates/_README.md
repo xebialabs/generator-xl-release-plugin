@@ -4,46 +4,46 @@ This project was generated using [XL Release Plugin Generator](https://github.co
 
 ## Setup
 
-Before you can use this plugin, you must install and configure the following dependencies on your machine:
+Before you can use this project, you must install and configure the following dependencies on your machine:
 
-1. [Node.js](https://nodejs.org/en/): Dependening on your system, you can install Node either from source or as a pre-prepackaged bundle. After installing Node, you should install [Yeoman][] using:
+1. [Node.js](https://nodejs.org/en/): Dependening on your system, you can install Node either from source or as a pre-prepackaged bundle. After installing Node, you should install [Yeoman](http://yeoman.io) using:
 
-    npm install -g yo
+    `npm install -g yo`
 
 2. [XL Release](https://xebialabs.com/products/xl-release/): A local distribution of XL Release should be available on you system. An accompanying valid licence should also available.
 
-3. [Gradle](http://gradle.org/): This project uses the [Gradle Plugins for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin) for development. For the plugin to work you have to configure the following properties (they can be set either in your global gradle.properties or a local gradle.properties located in the root of the plugin):
+3. [Gradle](http://gradle.org/): This project uses the [Gradle Plugins for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin) for development. For the plugin to work you have to configure the following properties (they can be set either in your global gradle.properties or a local gradle.properties located in the root of the project):
 
-    xlReleaseHome - the location of the XL Release distribution
-    xlReleaseLicence - the location of the XL Release licence 
+    * `xlReleaseHome` - the location of the XL Release distribution
+    * `xlReleaseLicence` - the location of the XL Release licence 
 
 
 ## Development
 
-To start the XL Release distribution run:
+To start the XL Release instance in plugin development mode run:
 
-    ./gradlew startXlRelease
+    `./gradlew startXlRelease`
 
-To stop the XL Release distribution run:
+To stop the XL Release instance run:
 
-    ./gradlew stopXlRelease
+    `./gradlew stopXlRelease`
 
 ### Generating a new task
 
-Position yourself into a previously generated plugin folder, then run:
+Position yourself in the root of the project then run:
 
 `yo xl-release-plugin:task`
 
 You will be asked a series of questions regarding your new task:
 
 * `? Task name`
-* `? Tile namespace`
+* `? Task namespace`
 
 After answering all questions a basic file / folder structure will be created.
 
 ### Generating a new tile
 
-Position yourself into a previously generated plugin folder, then run:
+Position yourself in the root of the project then run:
 
 `yo xl-release-plugin:tile`
 
@@ -55,13 +55,32 @@ You will be asked a series of questions regarding your new task:
 * `? Add details view?`
 
 After answering all questions a basic file / folder structure will be created.
-
+<% if (testFrameworks.length > 0) {%>
 ## Testing
 
+<% if (testFrameworks.indexOf('karma') > -1)  { %>
 Front end unit tests are run by [Karma](https://karma-runner.github.io) and written with [Jasmine](http://jasmine.github.io/). They are located in `<%= jsUnitTestDir %>` and can be run with:
 
-    npm test or ./gradlew testJavaScript
-
+    `npm test` or `./gradlew testJavaScript`
+<% } %>
+<% if (testFrameworks.indexOf('unittest') > -1) { %>
 Jython tests by default use [unittest](https://docs.python.org/2.7/library/unittest.html). They are located `<%= jythonUnitTestDir %>` and can be run with:
 
-    ./gradlew testJython
+    `./gradlew testJython`
+<% } %>
+
+<% } %>
+## <a name="building">Building
+
+This project uses the [gradle-git plugin](https://github.com/ajoberstar/gradle-git). The generated `build.gradle` contains commented out sections that configure the plugin. To be successfully able to build the project uncomment those lines and initialize a new Git repository and make an initial commit (if you haven't already). Now when building the project will contain a valid `plugin.version` field and can be droped into a XL Release distribution. To build the project run:
+
+    `./gradlew build`
+
+## Releasing
+
+This project uses the [gradle-git plugin](https://github.com/ajoberstar/gradle-git). To enable the plugin see the [Building](#building) section. You can release a new version of this project using following sample commands:
+
+* to release a new patch release: `./gradlew release -Prelease.scope=patch -Prelease.stage=final`
+* to release a new minor release candidate: `./gradlew release -Prelease.scope=minor -Prelease.stage=rc`
+
+Note that your Git repository must be clean to run any stage except for default `dev`.

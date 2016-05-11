@@ -43,7 +43,7 @@ Position yourself into a previously generated plugin folder, then run:
 You will be asked a series of questions regarding your new task:
 
 * `? Task name`
-* `? Tile namespace`
+* `? Task namespace`
 
 After answering all questions a basic file / folder structure will be created.
 

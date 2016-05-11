@@ -196,6 +196,7 @@ module.exports = XlrGenerator.extend({
                 this.destinationPath('README.md'),
                 {
                     pluginName: this.pluginName,
+                    testFrameworks: this.testFrameworks,
                     jsUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT,
                     jythonUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT
                 }
