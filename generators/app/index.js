@@ -188,6 +188,25 @@ module.exports = XlrGenerator.extend({
                     this.destinationPath(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER, 'runtests.py'))
                 );
             }
+        },
+
+        readme: function () {
+            this.fs.copyTpl(
+                this.templatePath('_README.md'),
+                this.destinationPath('README.md'),
+                {
+                    pluginName: this.pluginName,
+                    jsUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT,
+                    jythonUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT
+                }
+            );
+        },
+
+        gitignore: function() {
+            this.fs.copy(
+                this.templatePath('_gitignore'),
+                this.destinationPath('.gitignore')
+            );
         }
     },
 

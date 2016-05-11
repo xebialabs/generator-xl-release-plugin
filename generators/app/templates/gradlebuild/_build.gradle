@@ -50,11 +50,11 @@ xlReleasePlugin {
 group 'com.xebialabs.xlrelease.<%= kebabPluginName %>'
 
 <% if (testFrameworks.indexOf('karma') > -1) { %>
-task testJS(type: NpmTask) {
+task testJavaScript(type: NpmTask) {
   args = ['test']
 }
 
-test.dependsOn testJS
+test.dependsOn testJavaScript
 <% } %>
 
 <% if (testFrameworks.indexOf('unittest') > -1) { %>

@@ -18,6 +18,7 @@ module.exports = function (config) {
             'src/test/javascript/**/*.spec.js'
         ],
 
+        failOnEmptyTestSuite: false,
 
         // list of files to exclude
         exclude: [],

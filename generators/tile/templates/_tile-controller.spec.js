@@ -27,6 +27,6 @@ describe('<%= controllerName %>', function () {
     }));
 
     it('dummy test', function () {
-        expect(0).toBe(0);
+        expect(controller).not.toBe(null);
     });
 });
