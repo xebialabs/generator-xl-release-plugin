@@ -9,6 +9,6 @@ var Generator = module.exports = function Generator() {
 util.inherits(Generator, generators.Base);
 
 Generator.prototype.logCreate = function (message) {
-  this.log(chalk.green('create') + ' ' + message);
+  this.log(chalk.green('   create') + ' ' + message);
 };
 

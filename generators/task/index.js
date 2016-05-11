@@ -64,15 +64,51 @@ module.exports = XlrGenerator.extend({
     writing: {
         task: function () {
             // create directory...
-            var taskFullPath = path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, this.taskPath);
+            var taskFullPath = path.join.apply(null, [CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES].concat(_.split(this.taskNamespace, '.')));
             mkdirp(taskFullPath);
             this.logCreate(taskFullPath);
 
             var scriptName = _.upperFirst(_.camelCase(this.taskName));
+            var utilsScriptName = scriptName + 'Utils';
+
+            this.fs.copyTpl(
+                this.templatePath('_utils.py'),
+                this.destinationPath(path.join(taskFullPath, `${utilsScriptName}.py`)),
+                {}
+            );
+
             this.fs.copyTpl(
                 this.templatePath('_PythonScript.py'),
-                this.destinationPath(`${path.join(taskFullPath, scriptName)}.py`),
-                {}
+                this.destinationPath(path.join(taskFullPath, `${scriptName}.py`)),
+                {
+                    taskNamespace: this.taskNamespace,
+                    utilsScriptName: utilsScriptName
+                }
+            );
+
+            this.fs.copy(
+                this.templatePath('__init__.py'),
+                this.destinationPath(path.join(taskFullPath, '__init__.py'))
+            );
+
+            var testNamespaceModules = _.map(_.split(this.taskNamespace, '.'), function (ns) {
+                return 'test_' + ns;
+            });
+            var taskTestFullPath = path.join.apply(null, [CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT].concat(testNamespaceModules));
+            mkdirp(taskTestFullPath);
+            this.logCreate(taskTestFullPath);
+            this.fs.copyTpl(
+                this.templatePath('_utilsTest.py'),
+                this.destinationPath(path.join(taskTestFullPath, `test_${utilsScriptName}.py`)),
+                {
+                    taskNamespace: this.taskNamespace,
+                    utilsScriptName: utilsScriptName,
+                    testName: 'Test' + scriptName
+                }
+            );
+            this.fs.copy(
+                this.templatePath('__init__.py'),
+                this.destinationPath(path.join(taskTestFullPath, '__init__.py'))
             );
 
             var config = {
@@ -81,6 +117,8 @@ module.exports = XlrGenerator.extend({
                 type: [
                     `<type type="${this.taskNamespace}.${scriptName}" extends="${this.baseType}">`,
                     '    <!-- Add task properties here -->',
+                    '<property category="input" name="greetingName" kind="string" label="Your name" description="The name to say hello to." />',
+                    '<property category="output" name="message" kind="string" description="The printed greeting." />',
                     '</type>'
                 ]
             };
