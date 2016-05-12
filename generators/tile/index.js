@@ -68,15 +68,30 @@ module.exports = XlrGenerator.extend({
             }.bind(this));
         },
 
-        tileDetailsView: function () {
+        useDefaultController: function () {
             var done = this.async();
             this.prompt({
                 type: 'confirm',
-                name: 'tileDetailsView',
-                message: 'Add details view?',
+                name: 'useDefaultController',
+                message: 'Use default controller?',
+                default: false,
                 store: false
             }, function (answers) {
-                this.tileDetailsView = answers.tileDetailsView;
+                this.useDefaultController = answers.useDefaultController;
+                done();
+            }.bind(this));
+        },
+
+        createDetailsView: function () {
+            var done = this.async();
+            this.prompt({
+                type: 'confirm',
+                name: 'createDetailsView',
+                message: 'Add details view?',
+                default: true,
+                store: false
+            }, function (answers) {
+                this.createDetailsView = answers.createDetailsView;
                 done();
             }.bind(this));
         }
@@ -97,8 +112,10 @@ module.exports = XlrGenerator.extend({
         var tileIncludePath = path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, this.tilePath, pascalTileName);
         mkdirp(tileIncludePath);
         this.logCreate(tileIncludePath);
-        mkdirp(path.join(tileIncludePath, 'js'));
-        this.logCreate(path.join(tileIncludePath, 'js'));
+        if (!this.useDefaultController) {
+            mkdirp(path.join(tileIncludePath, 'js'));
+            this.logCreate(path.join(tileIncludePath, 'js'));
+        }
         mkdirp(path.join(tileIncludePath, 'css'));
         this.logCreate(path.join(tileIncludePath, 'css'));
         mkdirp(path.join(tileIncludePath, 'img'));
@@ -106,51 +123,67 @@ module.exports = XlrGenerator.extend({
 
         var kebabTileName = _.kebabCase(this.tileName); // JiraTask -> jira-task
         var moduleName = `xlrelease.${this.tileNamespace}.${xlrUtil.lowerCaseCompact(this.tileName)}`; // xlrelease.jira.jiratile
-        var controllerName = this.tileName + 'Controller';
+        var controllerName = this.useDefaultController ? CONSTANTS.DEFAULT_TILE_CONTROLLER_NAME : this.tileName + 'Controller';
 
-        this.fs.copyTpl(
-            this.templatePath('_tile.js'),
-            this.destinationPath(path.join(tileIncludePath, 'js', `${kebabTileName}.js`)),
-            {
-                moduleName: moduleName,
-                controllerName: controllerName
-            }
-        );
-
-        if (this.testFrameworks.indexOf('karma') > -1) {
-            var testPath = path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, this.tileNamespace, this.tileName);
-            mkdirp(testPath);
-            this.logCreate(testPath);
+        if (!this.useDefaultController) {
             this.fs.copyTpl(
-                this.templatePath('_tile-controller.spec.js'),
-                this.destinationPath(path.join(testPath, `${_.kebabCase(controllerName)}.spec.js`)),
+                this.templatePath('_tile.js'),
+                this.destinationPath(path.join(tileIncludePath, 'js', `${kebabTileName}.js`)),
                 {
                     moduleName: moduleName,
                     controllerName: controllerName
                 }
             );
-        }
 
+            if (this.testFrameworks.indexOf('karma') > -1) {
+            var testPath = path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, this.tileNamespace, this.tileName);
+                mkdirp(testPath);
+                this.logCreate(testPath);
+                this.fs.copyTpl(
+                    this.templatePath('_tile-controller.spec.js'),
+                    this.destinationPath(path.join(testPath, `${_.kebabCase(controllerName)}.spec.js`)),
+                    {
+                        moduleName: moduleName,
+                        controllerName: controllerName
+                    }
+                );
+            }
+        }
+        
         this.fs.copyTpl(
             this.templatePath('_tile.css'),
             this.destinationPath(path.join(tileIncludePath, 'css', `${kebabTileName}.css`)),
-            {kebabTileName: kebabTileName}
+            {
+                kebabTileName,
+                createDetailsView: this.createDetailsView
+            }
         );
 
         this.fs.copyTpl(
-            this.templatePath('_tile-summary-view.html'),
+            this.templatePath('_tile-view.html'),
             this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-summary-view.html`)),
-            {controllerName, kebabTileName}
+            {
+                useDefaultController: this.useDefaultController, 
+                controllerName, 
+                kebabTileName, 
+                viewMode: 'summary'
+            }
         );
 
-        if (this.tileDetailsView) {
+        if (this.createDetailsView) {
             this.fs.copyTpl(
-                this.templatePath('_tile-details-view.html'),
+                this.templatePath('_tile-view.html'),
                 this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details-view.html`)),
-                {controllerName, kebabTileName}
+                {
+                    useDefaultController: this.useDefaultController, 
+                    controllerName, 
+                    kebabTileName, 
+                    viewMode: 'details'
+                }
             );
         }
 
+        // update synthetic.xml
         var type = [
             `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
             `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
@@ -160,7 +193,7 @@ module.exports = XlrGenerator.extend({
             '</type>'
         ];
 
-        if (this.tileDetailsView) {
+        if (this.createDetailsView) {
             type.splice(2, 0, [`    <property name="detailsUri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-details-view.html" />`]);
         }
 
@@ -171,12 +204,15 @@ module.exports = XlrGenerator.extend({
         };
         xlrUtil.appendType(config);
 
-        var xlUiAppendConfig = {
-            path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
-            file: 'xl-ui-plugin.xml',
-            needle: '</plugin>',
-            type: [`<library name="${moduleName}"/>`]
-        };
-        xlrUtil.appendType(xlUiAppendConfig);
+        // update xl-ui-plugin.xml
+        if (!this.useDefaultController) {
+            var xlUiAppendConfig = {
+                path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
+                file: 'xl-ui-plugin.xml',
+                needle: '</plugin>',
+                type: [`<library name="${moduleName}" />`]
+            };
+            xlrUtil.appendType(xlUiAppendConfig);
+        }
     }
 });

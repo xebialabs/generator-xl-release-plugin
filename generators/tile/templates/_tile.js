@@ -2,7 +2,13 @@
     'use strict';
 
     function <%= controllerName %>($scope, XlrDefaultTileService) {
-        var tile = $scope.xlrTile.tile;
+        var tile;
+        if ($scope.xlrTile) {
+            tile = $scope.xlrTile.tile; // summary view
+        } else {
+            tile = $scope.xlrTileDetailsCtrl.tile; // details view
+        }
+
         var vm = this;
         load();
 
@@ -16,10 +22,12 @@
                 vm.loading = false;
             });
         }
+
+
     }
 
     <%= controllerName %>.$inject = ['$scope', 'xlrelease.dashboard.XlrDefaultTileService'];
-
+    
     angular.module('<%= moduleName %>', [])
         .controller('<%= controllerName %>', <%= controllerName %> );
 

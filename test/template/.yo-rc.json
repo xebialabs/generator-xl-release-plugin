@@ -8,7 +8,8 @@
       "xl-ui-plugin"
     ],
     "testFrameworks": [
-      "karma"
+      "karma",
+      "unittest"
     ]
   }
 }

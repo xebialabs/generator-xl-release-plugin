@@ -79,46 +79,141 @@ describe('XL Release plugin generator - Task', function () {
             })
             .withPrompts({
                 taskName: 'HelloTask',
-                taskNamespace: 'hello',
-                virtual: false
+                taskNamespace: 'hello'
             })
             .on('end', done);
     });
 
     it('generates task script and updates synthetic', function () {
-        assert.file(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'hello', 'HelloTask.py'));
+        assert.file([
+            path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'hello', 'HelloTask.py'),
+            path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'hello', 'HelloTaskUtils.py'),
+            path.join(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT, 'test_hello', 'test_HelloTaskUtils.py')
+        ]);
         assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'synthetic.xml'),
-            /[\s\S]*<type type="hello\.HelloTask" extends="xlrelease\.PythonScript">[\s]+<!-- Add task properties here -->[\s]+<\/type>[\s\S]*/);
+            /[\s\S]*<type type="hello\.HelloTask" extends="xlrelease\.PythonScript">[\s\S]+<\/type>[\s\S]*/);
     });
 });
 
 
 describe('XL Release plugin generator - Tile', function () {
 
-    beforeEach(function (done) {
-        helpers.run(path.join(__dirname, '../generators/tile'))
+    describe('use default controller and details view', function() {
+        beforeEach(function(done) {
+            helpers.run(path.join(__dirname, '../generators/tile'))
             .inTmpDir(function (dir) {
                 fse.copySync(path.join(__dirname, '../test/template'), dir);
             })
             .withPrompts({
                 tileName: 'WeatherTile',
                 tileNamespace: 'weather',
-                tileLabel: 'Weather label'
+                tileLabel: 'Weather label',
+                useDefaultController: true,
+                createDetailsView: true
             })
             .on('end', done);
+        });
+
+        it('generates summary view, details view and css', function() {
+            assert.file([
+                path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
+            ]);
+            assert.noFile([
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
+            ]);
+        });
     });
 
-    it('generates tile files and updates synthetic and xl-ui-plugins', function () {
-        assert.file([
-            path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
-            path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
-            path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'),
-            path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile-app.js'),
-            path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile-controller.js'),
-            path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
-            path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
-        ]);
-        assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'),
-            /[\s\S]*<library name="xlrelease.weather.weathertile"[\s\S]*/);
+    describe('use default controller and no details view', function() {
+        beforeEach(function(done) {
+            helpers.run(path.join(__dirname, '../generators/tile'))
+            .inTmpDir(function (dir) {
+                fse.copySync(path.join(__dirname, '../test/template'), dir);
+            })
+            .withPrompts({
+                tileName: 'WeatherTile',
+                tileNamespace: 'weather',
+                tileLabel: 'Weather label',
+                useDefaultController: true,
+                createDetailsView: false
+            })
+            .on('end', done);
+        });
+
+        it('generates summary view and css', function() {
+            assert.file([
+                path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
+            ]);
+            assert.noFile([
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
+            ]);
+        });
     });
+
+    describe('use custom controller and details view', function() {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/tile'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/template'), dir);
+                })
+                .withPrompts({
+                    tileName: 'WeatherTile',
+                    tileNamespace: 'weather',
+                    tileLabel: 'Weather label',
+                    useDefaultController: false,
+                    createDetailsView: true
+                })
+                .on('end', done);
+        });
+
+        it('generates angular module, styles, summary view, details view, front end tests and updates xl-ui-plugins', function () {
+            assert.file([
+                path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
+            ]);
+            assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'),
+                /[\s\S]*<library name="xlrelease.weather.weathertile"[\s\S]*\/>/);
+        });
+    });
+
+    describe('use custom controller and no details view', function() {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/tile'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/template'), dir);
+                })
+                .withPrompts({
+                    tileName: 'WeatherTile',
+                    tileNamespace: 'weather',
+                    tileLabel: 'Weather label',
+                    useDefaultController: false,
+                    createDetailsView: false
+                })
+                .on('end', done);
+        });
+
+        it('generates angular module, styles, front end tests and no details view', function() {
+            assert.file([
+                path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
+            ]);
+            assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'));
+        });
+    });
+
 });

@@ -57,6 +57,8 @@ const PLUGIN_PATHS = {
     TEST_JYTHON_UNIT_RUNNER
 };
 
+const DEFAULT_TILE_CONTROLLER_NAME = 'xlrelease.dashboard.XlrDefaultTileController';
+
 module.exports = {
     EXT_XMLS,
     TEST_FRAMEWORKS,
@@ -65,5 +67,6 @@ module.exports = {
     APP_TEMPLATE_PATHS,
     TASK_TEMPLATE_PATHS,
     TILE_TEMPLATE_PATHS,
-    PLUGIN_PATHS
+    PLUGIN_PATHS,
+    DEFAULT_TILE_CONTROLLER_NAME
 };

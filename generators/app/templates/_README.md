@@ -20,6 +20,61 @@ Before you can use this project, you must install and configure the following de
 
 ## Development
 
+### Project structure
+
+The following shows a sample generated XL Release plugin, the Greeting plugin. It defines a task, the GreeterTask, and a tile, the HelloTile.
+
+```
+xlr-greeting-plugin
+├─ README.md
+├─ build.gradle
+├─ gradle
+│   └─ wrapper
+│       ├─ gradle-wrapper.jar
+│       └─ gradle-wrapper.properties
+├─ gradlew
+├─ gradlew.bat
+├─ karma.conf.js // Front end test runner configuration
+├─ package.json
+├─ settings.gradle
+└─ src
+    ├─ main
+    │   └─ resources
+    │       ├─ greeter // GreeterTask namespace
+    │       │   ├─ GreeterTask.py // GreeterTask script
+    │       │   ├─ GreeterTaskUtils.py // GreeterTask utility module
+    │       │   └─ __init__.py
+    │       ├─ hello // HelloTile namespace
+    │       │   └─ HelloTile.py // HelloTile script
+    │       ├─ synthetic.xml // Type definitions
+    │       ├─ web
+    │       │   └─ include // tile front end
+    │       │       └─ hello // HelloTile namespace
+    │       │           └─ HelloTile // HelloTile front end
+    │       │               ├─ css
+    │       │               │   └─ hello-tile.css
+    │       │               ├─ hello-tile-summary-view.html
+    │       │               ├─ img
+    │       │               └─ js
+    │       │                   └─ hello-tile.js // HelloTile Angular module
+    │       ├─ xl-rest-endpoints.xml // ???
+    │       └─ xl-ui-plugin.xml // UI extension definitions
+    └─ test
+        ├─ javascript // front end tests
+        │   └─ unit
+        │       └─ hello
+        │           └─ HelloTile
+        │               └─ hello-tile-controller.spec.js
+        └─ jython // Jython tests
+            ├─ test_greeter
+            │   ├─ __init__.py
+            │   └─ test_GreeterTaskUtils.py
+            └─ xlunittestrunner
+                └─ runtests.py // unittest test runner script
+```
+
+### Starting/stoping XL Release in plugin development mode
+
 To start the XL Release instance in plugin development mode run:
 
     `./gradlew startXlRelease`
@@ -57,7 +112,6 @@ You will be asked a series of questions regarding your new task:
 After answering all questions a basic file / folder structure will be created.
 <% if (testFrameworks.length > 0) {%>
 ## Testing
-
 <% if (testFrameworks.indexOf('karma') > -1)  { %>
 Front end unit tests are run by [Karma](https://karma-runner.github.io) and written with [Jasmine](http://jasmine.github.io/). They are located in `<%= jsUnitTestDir %>` and can be run with:
 
@@ -67,8 +121,9 @@ Front end unit tests are run by [Karma](https://karma-runner.github.io) and writ
 Jython tests by default use [unittest](https://docs.python.org/2.7/library/unittest.html). They are located `<%= jythonUnitTestDir %>` and can be run with:
 
     `./gradlew testJython`
-<% } %>
 
+unittest uses predefined pattern for matching test files. By default it's `test*.py` but can be changed by editing the `runtests.py` script.
+<% } %>
 <% } %>
 ## <a name="building">Building
 

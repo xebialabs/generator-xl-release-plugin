@@ -2,7 +2,4 @@
         xmlns="http://www.xebialabs.com/deployit/ui-plugin"
         xsi:schemaLocation="http://www.xebialabs.com/deployit/ui-plugin xl-ui-plugin.xsd">
 
-    <!-- Add a custom main menu -->
-    <!-- Add a custom release page -->
-
 </plugin>

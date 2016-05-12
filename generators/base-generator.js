@@ -12,3 +12,7 @@ Generator.prototype.logCreate = function (message) {
   this.log(chalk.green('   create') + ' ' + message);
 };
 
+Generator.prototype.logWarning = function(message) {
+  this.log(chalk.yellow('  warning') + ' ' + message);
+};
+
