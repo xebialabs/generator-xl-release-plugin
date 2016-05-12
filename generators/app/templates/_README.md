@@ -12,7 +12,7 @@ Before you can use this project, you must install and configure the following de
 
 2. [XL Release](https://xebialabs.com/products/xl-release/): A local distribution of XL Release should be available on you system. An accompanying valid licence should also be available.
 
-3. [Gradle](http://gradle.org/): This project uses the [Gradle Plugins for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin) for development. For the plugin to work you have to configure the following properties (they can be set either in your global gradle.properties or a local gradle.properties located in the root of the project):
+3. [Gradle](http://gradle.org/): This project uses the [Gradle Plugin for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin) for development. For the plugin to work you have to configure the following properties (they can be set either in your global gradle.properties or a local gradle.properties located in the root of the project):
 
     * `xlReleaseHome` - the location of the XL Release distribution
     * `xlReleaseLicence` - the location of the XL Release licence 
@@ -75,15 +75,17 @@ xlr-greeting-plugin
 
 ### Starting/stopping XL Release in plugin development mode
 
-To start the XL Release instance in plugin development mode run:
+To (re)start the XL Release instance in plugin development mode you can run:
 
     `./gradlew startXlRelease`
 
-To stop the XL Release instance run:
+To stop the XL Release instance you can run:
 
     `./gradlew stopXlRelease`
     
-You can check the log files at `build/server/log/xl-release.log`.
+And the XL Release log files can be found at `build/server/log/xl-release.log`.
+
+When developing you only need to restart XL Release server when you change `synthetic.xml` or `xl-rest-endpoints.xml`, the changes in Jython scripts, JavaScript, CSS and HTML are picked up on any browser refresh, so your development cycle can be faster. Please read more about it in [the docs of XL Release Gradle plugin](https://github.com/xebialabs/gradle-xl-release-plugin-plugin).
 
 ### Generating a new task
 
