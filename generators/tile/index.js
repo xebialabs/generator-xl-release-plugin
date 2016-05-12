@@ -32,7 +32,7 @@ module.exports = XlrGenerator.extend({
             this.prompt({
                 type: 'input',
                 name: 'tileName',
-                message: 'Your tile name',
+                message: 'Tile name',
                 store: false
             }, function (answers) {
                 this.tileName = answers.tileName;

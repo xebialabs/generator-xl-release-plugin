@@ -104,9 +104,10 @@ Position yourself in the root of the project then run:
 
 You will be asked a series of questions regarding your new task:
 
-* `? Your tile name`
+* `? Tile name`
 * `? Tile namespace`
 * `? Tile label`
+* `? Use default controller?`
 * `? Add details view?`
 
 After answering all questions a basic file / folder structure will be created.
