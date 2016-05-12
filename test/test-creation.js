@@ -17,15 +17,14 @@ describe('XL Release plugin generator', function () {
                 .withPrompts({
                     pluginName: 'xlr-test-plugin',
                     namespace: 'test',
-                    extXmls: [],
-                    testFrameworks: []
+                    xlrFeatures: []
                 })
                 .on('end', done);
         });
 
         it('should create default files', function () {
             assert.file(EXPECTED_FILES.GRADLE);
-            assert.file(EXPECTED_FILES.NPM);
+            assert.noFile(EXPECTED_FILES.NPM);
             assert.file(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'synthetic.xml'));
             assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'));
             assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-rest-endpoints.xml'));
@@ -33,38 +32,21 @@ describe('XL Release plugin generator', function () {
         });
     });
 
-    describe('extension XMLs', function () {
+    describe('full configuration', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withPrompts({
                     pluginName: 'xlr-test-plugin',
                     namespace: 'test',
-                    extXmls: ['xl-ui-plugin', 'xl-rest-endpoints'],
-                    testFrameworks: []
+                    xlrFeatures: ['tiles', 'rest']
                 })
                 .on('end', done);
         });
 
         it('should create extension XMLs', function () {
             assert.file([path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'),
-                path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-rest-endpoints.xml')]);
-        });
-    });
-
-    describe('karma configuration', function () {
-        beforeEach(function (done) {
-            helpers.run(path.join(__dirname, '../generators/app'))
-                .withPrompts({
-                    pluginName: 'xlr-test-plugin',
-                    namespace: 'test',
-                    extXmls: [],
-                    testFrameworks: ['karma']
-                })
-                .on('end', done);
-        });
-
-        it('should create Karma/Jasmin conf file', function () {
-            assert.file('karma.conf.js');
+                path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-rest-endpoints.xml'),
+                'karma.conf.js']);
         });
     });
 
@@ -114,7 +96,7 @@ describe('XL Release plugin generator - Tile', function () {
             .on('end', done);
         });
 
-        it('generates summary view, details view and css', function() {
+        it('generates summary view, details view and styles', function() {
             assert.file([
                 path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
@@ -144,7 +126,7 @@ describe('XL Release plugin generator - Tile', function () {
             .on('end', done);
         });
 
-        it('generates summary view and css', function() {
+        it('generates summary view and styles', function() {
             assert.file([
                 path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),

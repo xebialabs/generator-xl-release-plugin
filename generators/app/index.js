@@ -14,8 +14,7 @@ util.inherits(XlrGenerator, BaseGenerator);
 module.exports = XlrGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
-        this.extXmls = {};
-        this.testFrameworks = [];
+        this.xlrFeatures = [];
     },
 
     initializing: {
@@ -24,8 +23,7 @@ module.exports = XlrGenerator.extend({
             this.pluginName = this.config.set('pluginName');
             this.kebabPluginName = this.config.set('kebabPluginName');
             this.namespace = this.config.set('namespace');
-            this.extXmls = this.config.set('extXmls');
-            this.testFrameworks = this.config.set('testFrameworks');
+            this.xlrFeatures = this.config.set('xlrFeatures');
         }
     },
 
@@ -58,37 +56,30 @@ module.exports = XlrGenerator.extend({
             }.bind(this));
         },
 
-        extXmls: function () {
+        xlrFeatures: function () {
             var done = this.async();
             this.prompt({
                 type: 'checkbox',
-                name: 'extXmls',
-                message: 'Generate additional extensions XMLs?',
-                choices: CONSTANTS.EXT_XMLS,
-                store: true
+                name: 'xlrFeatures',
+                message: 'What do you plan to develop as part of this plugin?',
+                choices: [{
+                    name: 'Tiles',
+                    value: 'tiles',
+                    checked: true
+                }, {
+                    name: 'Custom REST endpoints',
+                    value: 'rest',
+                    checked: true
+                }],
+                store: false
             }, function (answers) {
-                this.extXmls = answers.extXmls;
-                done();
-            }.bind(this));
-        },
-
-        testFrameworks: function () {
-            var done = this.async();
-            this.prompt({
-                type: 'checkbox',
-                name: 'testFrameworks',
-                message: 'Which test frameworks to use?',
-                choices: CONSTANTS.TEST_FRAMEWORKS,
-                store: true
-            }, function (answers) {
-                this.testFrameworks = answers.testFrameworks;
+                this.xlrFeatures = answers.xlrFeatures;
                 done();
             }.bind(this));
         }
     },
 
-    configuring: {
-    },
+    configuring: {},
 
     default: {
         // save user input for future?
@@ -96,8 +87,7 @@ module.exports = XlrGenerator.extend({
             this.config.set('pluginName', this.pluginName);
             this.config.set('kebabPluginName', this.kebabPluginName);
             this.config.set('namespace', this.namespace);
-            this.config.set('extXmls', this.extXmls);
-            this.config.set('testFrameworks', this.testFrameworks);
+            this.config.set('xlrFeatures', this.xlrFeatures);
         }
     },
 
@@ -124,7 +114,7 @@ module.exports = XlrGenerator.extend({
             this.fs.copyTpl(
                 this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.BUILD}/_build.gradle`),
                 this.destinationPath('build.gradle'),
-                {kebabPluginName: this.kebabPluginName, testFrameworks: this.testFrameworks}
+                {kebabPluginName: this.kebabPluginName, xlrFeatures: this.xlrFeatures}
             );
         },
 
@@ -138,7 +128,7 @@ module.exports = XlrGenerator.extend({
                 {}
             );
 
-            if (this.extXmls.indexOf('xl-rest-endpoints') > -1) {
+            if (this.xlrFeatures.indexOf('rest') > -1) {
                 this.fs.copyTpl(
                     this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.RESOURCES}/_xl-rest-endpoints.xml`),
                     this.destinationPath(`${CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES}/xl-rest-endpoints.xml`),
@@ -146,7 +136,7 @@ module.exports = XlrGenerator.extend({
                 );
             }
 
-            if (this.extXmls.indexOf('xl-ui-plugin') > -1) {
+            if (this.xlrFeatures.indexOf('tiles') > -1) {
                 this.fs.copyTpl(
                     this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.RESOURCES}/_xl-ui-plugin.xml`),
                     this.destinationPath(`${CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES}/xl-ui-plugin.xml`)
@@ -156,20 +146,21 @@ module.exports = XlrGenerator.extend({
 
         // package.json...
         npm: function () {
-            this.fs.copyTpl(
-                this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.NPM}/_package.json`),
-                this.destinationPath('package.json'),
-                {
-                    pluginName: this.pluginName,
-                    kebabPluginName: this.kebabPluginName,
-                    testFrameworks: this.testFrameworks
-                }
-            );
+            if (this.xlrFeatures.indexOf('tiles') > -1) {
+                this.fs.copyTpl(
+                    this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.NPM}/_package.json`),
+                    this.destinationPath('package.json'),
+                    {
+                        kebabPluginName: this.kebabPluginName,
+                        pluginName: this.pluginName
+                    }
+                );
+            }
         },
 
         // Karma test runner...
         karma: function () {
-            if (this.testFrameworks.indexOf('karma') > -1) {
+            if (this.xlrFeatures.indexOf('tiles') > -1) {
                 this.fs.copy(
                     this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.KARMA}/_karma.conf.js`),
                     this.destinationPath('karma.conf.js')
@@ -178,16 +169,14 @@ module.exports = XlrGenerator.extend({
         },
 
         unittest: function () {
-            if (this.testFrameworks.indexOf('unittest') > -1) {
-                mkdirp(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT);
-                this.logCreate(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT);
-                mkdirp(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER);
-                this.logCreate(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER);
-                this.fs.copy(
-                    this.templatePath(path.join(CONSTANTS.APP_TEMPLATE_PATHS.UNITTEST, 'runtests.py')),
-                    this.destinationPath(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER, 'runtests.py'))
-                );
-            }
+            mkdirp(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT);
+            this.logCreate(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT);
+            mkdirp(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER);
+            this.logCreate(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER);
+            this.fs.copy(
+                this.templatePath(path.join(CONSTANTS.APP_TEMPLATE_PATHS.UNITTEST, 'runtests.py')),
+                this.destinationPath(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT_RUNNER, 'runtests.py'))
+            );
         },
 
         readme: function () {
@@ -196,14 +185,14 @@ module.exports = XlrGenerator.extend({
                 this.destinationPath('README.md'),
                 {
                     pluginName: this.pluginName,
-                    testFrameworks: this.testFrameworks,
+                    xlrFeatures: this.xlrFeatures,
                     jsUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT,
                     jythonUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT
                 }
             );
         },
 
-        gitignore: function() {
+        gitignore: function () {
             this.fs.copy(
                 this.templatePath('_gitignore'),
                 this.destinationPath('.gitignore')
@@ -212,7 +201,9 @@ module.exports = XlrGenerator.extend({
     },
 
     install: function () {
-        this.npmInstall();
+        if (this.xlrFeatures.indexOf('tiles') > -1) {
+            this.npmInstall();
+        }
     },
 
     end: function () {

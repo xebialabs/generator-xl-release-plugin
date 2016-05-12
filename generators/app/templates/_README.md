@@ -113,21 +113,20 @@ You will be asked a series of questions regarding your new task:
 * `? Add details view?`
 
 After answering all questions a basic file / folder structure will be created.
-<% if (testFrameworks.length > 0) {%>
+
 ## Testing
-<% if (testFrameworks.indexOf('karma') > -1)  { %>
+<% if (xlrFeatures.indexOf('tiles') > -1)  { %>
 Front end unit tests are run by [Karma](https://karma-runner.github.io) and written with [Jasmine](http://jasmine.github.io/). They are located in `<%= jsUnitTestDir %>` and can be run with:
 
     `npm test` or `./gradlew testJavaScript`
 <% } %>
-<% if (testFrameworks.indexOf('unittest') > -1) { %>
+
 Jython tests by default use [unittest](https://docs.python.org/2.7/library/unittest.html). They are located `<%= jythonUnitTestDir %>` and can be run with:
 
     `./gradlew testJython`
 
 unittest uses predefined pattern for matching test files. By default it's `test*.py` but can be changed by editing the `runtests.py` script.
-<% } %>
-<% } %>
+
 ## <a name="building">Building
 
 This project uses the [gradle-git plugin](https://github.com/ajoberstar/gradle-git). The generated `build.gradle` contains commented out sections that configure the plugin. To be successfully able to build the project uncomment those lines and initialize a new Git repository and make an initial commit (if you haven't already). Now when building the project will contain a valid `plugin.version` field and can be droped into a XL Release distribution. To build the project run:

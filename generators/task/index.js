@@ -15,14 +15,12 @@ util.inherits(XlrGenerator, BaseGenerator);
 module.exports = XlrGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
-        this.testFrameworks = [];
         this.baseType = 'xlrelease.PythonScript';
     },
 
     initializing: {
         loadConfig: function () {
             this.namespace = this.config.get('namespace');
-            this.testFrameworks = this.config.get('testFrameworks');
         }
     },
 

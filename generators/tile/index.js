@@ -15,14 +15,12 @@ util.inherits(XlrGenerator, BaseGenerator);
 module.exports = XlrGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
-        this.testFrameworks = [];
     },
 
     initializing: {
         loadConfig: function () {
             this.pluginName = this.config.get('pluginName');
             this.namespace = this.config.get('namespace');
-            this.testFrameworks = this.config.get('testFrameworks');
         }
     },
 
@@ -136,21 +134,19 @@ module.exports = XlrGenerator.extend({
                 }
             );
 
-            if (this.testFrameworks.indexOf('karma') > -1) {
             var testPath = path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, this.tileNamespace, this.tileName);
-                mkdirp(testPath);
-                this.logCreate(testPath);
-                this.fs.copyTpl(
-                    this.templatePath('_tile-controller.spec.js'),
-                    this.destinationPath(path.join(testPath, `${_.kebabCase(controllerName)}.spec.js`)),
-                    {
-                        moduleName: moduleName,
-                        controllerName: controllerName
-                    }
-                );
-            }
+            mkdirp(testPath);
+            this.logCreate(testPath);
+            this.fs.copyTpl(
+                this.templatePath('_tile-controller.spec.js'),
+                this.destinationPath(path.join(testPath, `${_.kebabCase(controllerName)}.spec.js`)),
+                {
+                    moduleName: moduleName,
+                    controllerName: controllerName
+                }
+            );
         }
-        
+
         this.fs.copyTpl(
             this.templatePath('_tile.css'),
             this.destinationPath(path.join(tileIncludePath, 'css', `${kebabTileName}.css`)),
@@ -164,9 +160,9 @@ module.exports = XlrGenerator.extend({
             this.templatePath('_tile-view.html'),
             this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-summary-view.html`)),
             {
-                useDefaultController: this.useDefaultController, 
-                controllerName, 
-                kebabTileName, 
+                useDefaultController: this.useDefaultController,
+                controllerName,
+                kebabTileName,
                 viewMode: 'summary'
             }
         );
@@ -176,9 +172,9 @@ module.exports = XlrGenerator.extend({
                 this.templatePath('_tile-view.html'),
                 this.destinationPath(path.join(tileIncludePath, `${kebabTileName}-details-view.html`)),
                 {
-                    useDefaultController: this.useDefaultController, 
-                    controllerName, 
-                    kebabTileName, 
+                    useDefaultController: this.useDefaultController,
+                    controllerName,
+                    kebabTileName,
                     viewMode: 'details'
                 }
             );
