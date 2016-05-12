@@ -117,8 +117,8 @@ module.exports = XlrGenerator.extend({
                 type: [
                     `<type type="${this.taskNamespace}.${scriptName}" extends="${this.baseType}">`,
                     '    <!-- Add task properties here -->',
-                    '<property category="input" name="greetingName" kind="string" label="Your name" description="The name to say hello to." />',
-                    '<property category="output" name="message" kind="string" description="The printed greeting." />',
+                    '    <property category="input" name="greetingName" kind="string" label="Your name" description="The name to say hello to." />',
+                    '    <property category="output" name="message" kind="string" description="The printed greeting." />',
                     '</type>'
                 ]
             };

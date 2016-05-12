@@ -6,11 +6,11 @@ This project was generated using [XL Release Plugin Generator](https://github.co
 
 Before you can use this project, you must install and configure the following dependencies on your machine:
 
-1. [Node.js](https://nodejs.org/en/): Dependening on your system, you can install Node either from source or as a pre-prepackaged bundle. After installing Node, you should install [Yeoman](http://yeoman.io) using:
+1. [Node.js](https://nodejs.org/en/): Depending on your system, you can install Node either from source or as a pre-prepackaged bundle. After installing Node, you should install [Yeoman](http://yeoman.io) using:
 
     `npm install -g yo`
 
-2. [XL Release](https://xebialabs.com/products/xl-release/): A local distribution of XL Release should be available on you system. An accompanying valid licence should also available.
+2. [XL Release](https://xebialabs.com/products/xl-release/): A local distribution of XL Release should be available on you system. An accompanying valid licence should also be available.
 
 3. [Gradle](http://gradle.org/): This project uses the [Gradle Plugins for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin) for development. For the plugin to work you have to configure the following properties (they can be set either in your global gradle.properties or a local gradle.properties located in the root of the project):
 
@@ -57,7 +57,7 @@ xlr-greeting-plugin
     │       │               ├─ img
     │       │               └─ js
     │       │                   └─ hello-tile.js // HelloTile Angular module
-    │       ├─ xl-rest-endpoints.xml // ???
+    │       ├─ xl-rest-endpoints.xml // Custom REST endpoints
     │       └─ xl-ui-plugin.xml // UI extension definitions
     └─ test
         ├─ javascript // front end tests
@@ -73,7 +73,7 @@ xlr-greeting-plugin
                 └─ runtests.py // unittest test runner script
 ```
 
-### Starting/stoping XL Release in plugin development mode
+### Starting/stopping XL Release in plugin development mode
 
 To start the XL Release instance in plugin development mode run:
 
@@ -82,6 +82,8 @@ To start the XL Release instance in plugin development mode run:
 To stop the XL Release instance run:
 
     `./gradlew stopXlRelease`
+    
+You can check the log files at `build/server/log/xl-release.log`.
 
 ### Generating a new task
 

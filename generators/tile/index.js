@@ -188,8 +188,8 @@ module.exports = XlrGenerator.extend({
             `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
             `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
             `    <property name="title" description="Display name of the tile" default="${this.tileLabel}"/>`,
-            '    <property category="input" name="greetingName" required="true" description="The name to say hello to." />',
             '    <!-- Add tile properties here -->',
+            '    <property category="input" name="greetingName" required="true" description="The name to say hello to." />',
             '</type>'
         ];
 
