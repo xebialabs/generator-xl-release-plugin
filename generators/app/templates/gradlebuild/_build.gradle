@@ -17,7 +17,7 @@ buildscript {
 plugins {
   id 'java'
   id 'com.moowork.node' version '0.12'
-//  id "org.ajoberstar.release-opinion" version "1.4.2" // If you want to use the git release plugin uncomment this line
+//  id "org.ajoberstar.release-opinion" version "1.4.2" // If you want to use the gradle release plugin uncomment this line
   <% if (testFrameworks.indexOf('unittest') > -1) { %>id "com.github.rzabini.gradle-jython" version "1.0.0"<% } %>
 }
 apply plugin: 'xebialabs.xl-release.plugin'
@@ -30,9 +30,8 @@ node {
 }
 
 
-/* Configuration of release task */
 // If you want to use the git release plugin uncomment the next section
-/*
+/* Configure release task
 release {
   grgit = org.ajoberstar.grgit.Grgit.open()
 }
@@ -86,8 +85,10 @@ testJython.finalizedBy cleanUpTestJython
 test.dependsOn testJython
 <% } %>
 
+// Uncomment following line if you implement Java/Scala code depending on XL Release classes
+//configurations.compile.extendsFrom configurations.xlReleaseJars
+
+// Uncomment following line if your plugin depends on additional libraries
 //dependencies {
 //  xlReleaseAdditionalClasspath('additional-jars-required-by-this-xlr-plugin')
 //}
-// Uncomment following line if you implement Java/Scala code depending on XL Release classes
-//configurations.compile.extendsFrom configurations.xlReleaseJars

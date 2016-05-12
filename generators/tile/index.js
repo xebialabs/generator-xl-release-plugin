@@ -185,6 +185,7 @@ module.exports = XlrGenerator.extend({
 
         // update synthetic.xml
         var type = [
+            '',
             `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
             `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
             `    <property name="title" description="Display name of the tile" default="${this.tileLabel}"/>`,

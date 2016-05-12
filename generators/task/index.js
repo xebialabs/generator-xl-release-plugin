@@ -115,6 +115,7 @@ module.exports = XlrGenerator.extend({
                 path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
                 file: 'synthetic.xml',
                 type: [
+                    '',
                     `<type type="${this.taskNamespace}.${scriptName}" extends="${this.baseType}">`,
                     '    <!-- Add task properties here -->',
                     '    <property category="input" name="greetingName" kind="string" label="Your name" description="The name to say hello to." />',

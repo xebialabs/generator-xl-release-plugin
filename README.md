@@ -62,13 +62,17 @@ You will be asked a series of questions regarding your new task:
 
 After answering all questions a basic file / folder structure will be created.
 
-## Gradle Plugins for XL Release
+## Gradle Plugin for XL Release
 
-This project uses [Gradle Plugins for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin). Configuration and usage details can be found at the projects repo [readme](https://github.com/xebialabs/gradle-xl-release-plugin-plugin/blob/master/README.md).
+This project uses [Gradle Plugin for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin). Configuration and usage details can be found at the projects repo [readme](https://github.com/xebialabs/gradle-xl-release-plugin-plugin/blob/master/README.md).
 
 ## Notes
 
-* When using Jython if you receive a `ImportError: no module named` message, make sure your modules are not inside a package named `test`
+* When using Jython if you receive an `ImportError: no module named` message, make sure your modules are not inside a package named `test`
+
+## Development
+
+You can run test of this generator using `npm test`.
 
 ## Feedback
 
