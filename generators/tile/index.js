@@ -27,18 +27,6 @@ module.exports = XlrGenerator.extend({
     },
 
     prompting: {
-        tileName: function () {
-            var done = this.async();
-            this.prompt({
-                type: 'input',
-                name: 'tileName',
-                message: 'Tile name',
-                store: false
-            }, function (answers) {
-                this.tileName = answers.tileName;
-                done();
-            }.bind(this));
-        },
 
         tileNamespace: function () {
             var done = this.async();
@@ -51,6 +39,19 @@ module.exports = XlrGenerator.extend({
             }, function (answers) {
                 this.tileNamespace = answers.tileNamespace;
                 this.tilePath = xlrUtil.namespaceToPath(this.tileNamespace);
+                done();
+            }.bind(this));
+        },
+
+        tileName: function () {
+            var done = this.async();
+            this.prompt({
+                type: 'input',
+                name: 'tileName',
+                message: 'Tile name',
+                store: false
+            }, function (answers) {
+                this.tileName = answers.tileName;
                 done();
             }.bind(this));
         },

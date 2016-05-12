@@ -27,19 +27,6 @@ module.exports = XlrGenerator.extend({
     },
 
     prompting: {
-        taskName: function () {
-            var done = this.async();
-            this.prompt({
-                type: 'input',
-                name: 'taskName',
-                message: 'Task name',
-                store: false
-            }, (answers => {
-                this.taskName = answers.taskName;
-                done();
-            }).bind(this));
-        },
-
         taskNamespace: function () {
             var done = this.async();
             this.prompt({
@@ -51,6 +38,19 @@ module.exports = XlrGenerator.extend({
             }, (answers => {
                 this.taskNamespace = answers.taskNamespace;
                 this.taskPath = _.replace(this.taskNamespace, '.', '/');
+                done();
+            }).bind(this));
+        },
+
+        taskName: function () {
+            var done = this.async();
+            this.prompt({
+                type: 'input',
+                name: 'taskName',
+                message: 'Task name',
+                store: false
+            }, (answers => {
+                this.taskName = answers.taskName;
                 done();
             }).bind(this));
         }
