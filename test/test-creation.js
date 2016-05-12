@@ -198,4 +198,28 @@ describe('XL Release plugin generator - Tile', function () {
         });
     });
 
+    describe("when there's no xl-ui-plugin.xml", function () {
+
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/tile'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/template-no-ui-xml'), dir);
+                })
+                .withPrompts({
+                    tileName: 'WeatherTile',
+                    tileNamespace: 'weather',
+                    tileLabel: 'Weather label',
+                    useDefaultController: false,
+                    createDetailsView: false
+                })
+                .on('end', done);
+        });
+
+        it('generates it and with the angular module', function () {
+            assert.file(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'));
+            assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'),
+                /[\s\S]*<library name="xlrelease.weather.weathertile"[\s\S]*\/>/);
+        });
+    });
+
 });

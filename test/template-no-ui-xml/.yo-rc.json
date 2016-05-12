@@ -1,0 +1,8 @@
+{
+  "generator-xl-release-plugin": {
+    "pluginName": "xlr-test-plugin",
+    "kebabPluginName": "xlr-test-plugin",
+    "namespace": "test",
+    "xlrFeatures": []
+  }
+}

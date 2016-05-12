@@ -202,15 +202,24 @@ module.exports = XlrGenerator.extend({
         };
         xlrUtil.appendType(config);
 
-        // update xl-ui-plugin.xml
         if (!this.useDefaultController) {
-            var xlUiAppendConfig = {
-                path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
-                file: 'xl-ui-plugin.xml',
-                needle: '</plugin>',
-                type: [`<library name="${moduleName}" />`]
-            };
-            xlrUtil.appendType(xlUiAppendConfig);
+            if (this.fs.exists(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'))) {
+                var xlUiAppendConfig = {
+                    path: CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES,
+                    file: 'xl-ui-plugin.xml',
+                    needle: '</plugin>',
+                    type: [`<library name="${moduleName}" />`]
+                };
+                xlrUtil.appendType(xlUiAppendConfig);
+            } else {
+                this.fs.copyTpl(
+                    this.templatePath('_xl-ui-plugin.xml'),
+                    this.destinationPath(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml')),
+                    {
+                        moduleName: moduleName
+                    }
+                );
+            }
         }
     }
 });
