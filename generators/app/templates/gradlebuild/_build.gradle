@@ -1,7 +1,7 @@
 /* Gradle plugins used in this project */
 buildscript {
   dependencies {
-    classpath 'com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:0.0.1-rc.2'
+    classpath 'com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:0.0.1-rc.3'
   }
   repositories {
     maven {
@@ -20,7 +20,7 @@ plugins {
 //  id "org.ajoberstar.release-opinion" version "1.4.2" // If you want to use the gradle release plugin uncomment this line
   id "com.github.rzabini.gradle-jython" version "1.0.0"
 }
-apply plugin: 'xebialabs.xl-release.plugin'
+apply plugin: 'com.xebialabs.xl-release.plugin'
 
 /* Configuration of Node */
 node {

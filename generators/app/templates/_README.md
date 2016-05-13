@@ -20,6 +20,53 @@ Before you can use this project, you must install and configure the following de
 
 ## Development
 
+### Starting/stopping XL Release in plugin development mode
+
+To (re)start the XL Release instance in plugin development mode you can run:
+
+    ./gradlew startXLRelease
+    
+or just `./gradlew start`.
+
+To stop the XL Release instance you can run:
+
+    ./gradlew stopXLRelease
+    
+or just `./gradlew stop`.
+    
+The XL Release log files can be found at `build/server/log/xl-release.log`.
+
+When developing you only need to restart XL Release server when you change `synthetic.xml` or `xl-rest-endpoints.xml`, the changes in Jython scripts, JavaScript, CSS and HTML are picked up on any browser refresh, so your development cycle can be faster. Please read more about it in [the docs of XL Release Gradle plugin](https://github.com/xebialabs/gradle-xl-release-plugin-plugin).
+
+### Generating a new task
+
+Position yourself in the root of the project then run:
+
+`yo xl-release-plugin:task`
+
+You will be asked a series of questions regarding your new task:
+
+* `? Task namespace`
+* `? Task name`
+
+After answering all questions a basic file / folder structure will be created.
+
+### Generating a new tile
+
+Position yourself in the root of the project then run:
+
+`yo xl-release-plugin:tile`
+
+You will be asked a series of questions regarding your new task:
+
+* `? Tile namespace`
+* `? Tile name`
+* `? Tile label`
+* `? Use default controller?`
+* `? Add details view?`
+
+After answering all questions a basic file / folder structure will be created.
+
 ### Project structure
 
 The following shows a sample generated XL Release plugin, the Greeting plugin. It defines a task, the GreeterTask, and a tile, the HelloTile.
@@ -72,49 +119,6 @@ xlr-greeting-plugin
             └─ xlunittestrunner
                 └─ runtests.py // unittest test runner script
 ```
-
-### Starting/stopping XL Release in plugin development mode
-
-To (re)start the XL Release instance in plugin development mode you can run:
-
-    `./gradlew startXlRelease`
-
-To stop the XL Release instance you can run:
-
-    `./gradlew stopXlRelease`
-    
-And the XL Release log files can be found at `build/server/log/xl-release.log`.
-
-When developing you only need to restart XL Release server when you change `synthetic.xml` or `xl-rest-endpoints.xml`, the changes in Jython scripts, JavaScript, CSS and HTML are picked up on any browser refresh, so your development cycle can be faster. Please read more about it in [the docs of XL Release Gradle plugin](https://github.com/xebialabs/gradle-xl-release-plugin-plugin).
-
-### Generating a new task
-
-Position yourself in the root of the project then run:
-
-`yo xl-release-plugin:task`
-
-You will be asked a series of questions regarding your new task:
-
-* `? Task name`
-* `? Task namespace`
-
-After answering all questions a basic file / folder structure will be created.
-
-### Generating a new tile
-
-Position yourself in the root of the project then run:
-
-`yo xl-release-plugin:tile`
-
-You will be asked a series of questions regarding your new task:
-
-* `? Tile name`
-* `? Tile namespace`
-* `? Tile label`
-* `? Use default controller?`
-* `? Add details view?`
-
-After answering all questions a basic file / folder structure will be created.
 
 ## Testing
 <% if (xlrFeatures.indexOf('tiles') > -1)  { %>
