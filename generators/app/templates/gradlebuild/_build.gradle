@@ -1,7 +1,7 @@
 /* Gradle plugins used in this project */
 buildscript {
   dependencies {
-    classpath 'com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:0.0.1-rc.3'
+    classpath 'com.xebialabs.gradle.plugins.xlrelease:gradle-xl-release-plugin-plugin:0.0.1'
   }
   repositories {
     maven {
