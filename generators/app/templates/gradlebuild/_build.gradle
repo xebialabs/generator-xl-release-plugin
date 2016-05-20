@@ -55,10 +55,11 @@ task testJavaScriptUnit(type: NpmTask) {
 }
 test.dependsOn testJavaScriptUnit
 
-task testEnd2End(type: NpmTask, dependsOn: 'startXLRelease') {
+task testEnd2End(type: NpmTask, dependsOn: startXLRelease) {
   args = ['run', 'protractor']
 }
 test.dependsOn testEnd2End
+testEnd2End.finalizedBy stopXLRelease
 
 <% } %>
 sourceSets.main.resources.srcDirs = ["src/main/jython", "src/main/resources"]

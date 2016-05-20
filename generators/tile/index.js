@@ -120,7 +120,7 @@ module.exports = XlrGenerator.extend({
         mkdirp(path.join(tileIncludePath, 'img'));
         this.logCreate(path.join(tileIncludePath, 'img'));
 
-        var kebabTileName = _.kebabCase(this.tileName); // JiraTask -> jira-task
+        var kebabTileName = _.kebabCase(this.tileName); // JiraTile -> jira-tile
         var moduleName = `xlrelease.${this.tileNamespace}.${xlrUtil.lowerCaseCompact(this.tileName)}`; // xlrelease.jira.jiratile
         var controllerName = this.useDefaultController ? CONSTANTS.DEFAULT_TILE_CONTROLLER_NAME : this.tileName + 'Controller';
 
@@ -146,6 +146,19 @@ module.exports = XlrGenerator.extend({
                 }
             );
         }
+
+        var e2ePath = path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario');
+        mkdirp(e2ePath);
+        this.logCreate(e2ePath);
+        this.fs.copyTpl(
+            this.templatePath('_tile-scenario.js'),
+            this.destinationPath(path.join(e2ePath, `${kebabTileName}-scenario.js`)),
+            {
+                tileLabel: this.tileLabel,
+                tileNamespace: this.tileNamespace,
+                pascalTileName
+            }
+        );
 
         this.fs.copyTpl(
             this.templatePath('_tile.css'),

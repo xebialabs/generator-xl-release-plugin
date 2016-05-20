@@ -103,20 +103,23 @@ describe('XL Release plugin generator - Tile', function () {
             .withPrompts({
                 tileName: 'WeatherTile',
                 tileNamespace: 'weather',
-                tileLabel: 'Weather label',
+                tileLabel: 'Weather tile',
                 useDefaultController: true,
                 createDetailsView: true
             })
             .on('end', done);
         });
 
-        it('generates summary view, details view and styles', function() {
+        it('generates summary view, details view, styles and e2e tests', function() {
             assert.file([
                 path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario', 'weather-tile-scenario.js')
             ]);
+            assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario', 'weather-tile-scenario.js'),
+                /[\s\S]*describe\('Weather tile'[\s\S]*id: 'ReleaseWithWeatherTile'[\s\S]*type: 'weather.WeatherTile'/);
             assert.noFile([
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile.js'),
                 path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
@@ -133,18 +136,19 @@ describe('XL Release plugin generator - Tile', function () {
             .withPrompts({
                 tileName: 'WeatherTile',
                 tileNamespace: 'weather',
-                tileLabel: 'Weather label',
+                tileLabel: 'Weather tile',
                 useDefaultController: true,
                 createDetailsView: false
             })
             .on('end', done);
         });
 
-        it('generates summary view and styles', function() {
+        it('generates summary view, styles and e2e tests', function() {
             assert.file([
                 path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'weather', 'WeatherTile.py'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario', 'weather-tile-scenario.js')
             ]);
             assert.noFile([
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'),
@@ -163,7 +167,7 @@ describe('XL Release plugin generator - Tile', function () {
                 .withPrompts({
                     tileName: 'WeatherTile',
                     tileNamespace: 'weather',
-                    tileLabel: 'Weather label',
+                    tileLabel: 'Weather tile',
                     useDefaultController: false,
                     createDetailsView: true
                 })
@@ -177,7 +181,8 @@ describe('XL Release plugin generator - Tile', function () {
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile.js'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
-                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario', 'weather-tile-scenario.js')
             ]);
             assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'),
                 /[\s\S]*<library name="xlrelease.weather.weathertile"[\s\S]*\/>/);
@@ -193,7 +198,7 @@ describe('XL Release plugin generator - Tile', function () {
                 .withPrompts({
                     tileName: 'WeatherTile',
                     tileNamespace: 'weather',
-                    tileLabel: 'Weather label',
+                    tileLabel: 'Weather tile',
                     useDefaultController: false,
                     createDetailsView: false
                 })
@@ -206,7 +211,8 @@ describe('XL Release plugin generator - Tile', function () {
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-summary-view.html'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'js', 'weather-tile.js'),
                 path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'css', 'weather-tile.css'),
-                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js')
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT, 'weather', 'WeatherTile', 'weather-tile-controller.spec.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario', 'weather-tile-scenario.js')
             ]);
             assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.WEB_INCLUDE, 'weather', 'WeatherTile', 'weather-tile-details-view.html'));
         });
@@ -222,7 +228,7 @@ describe('XL Release plugin generator - Tile', function () {
                 .withPrompts({
                     tileName: 'WeatherTile',
                     tileNamespace: 'weather',
-                    tileLabel: 'Weather label',
+                    tileLabel: 'Weather tile',
                     useDefaultController: false,
                     createDetailsView: false
                 })
