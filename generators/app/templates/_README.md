@@ -124,7 +124,11 @@ xlr-greeting-plugin
 <% if (xlrFeatures.indexOf('tiles') > -1)  { %>
 Front end unit tests are run by [Karma](https://karma-runner.github.io) and written with [Jasmine](http://jasmine.github.io/). They are located in `<%= jsUnitTestDir %>` and can be run with:
 
-    `npm test` or `./gradlew testJavaScript`
+    `npm test` or `./gradlew testJavaScriptUnit`
+    
+End-to-end tests are run by [Protractor](http://www.protractortest.org/) and are located in `<%= jsE2eTestDir %>`. They can be run with:
+                                                                                            
+    `npm run protractor` or `./gradlew testEnd2End`
 <% } %>
 
 Jython tests by default use [unittest](https://docs.python.org/2.7/library/unittest.html). They are located `<%= jythonUnitTestDir %>` and can be run with:

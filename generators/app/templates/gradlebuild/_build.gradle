@@ -50,13 +50,17 @@ xlReleasePlugin {
 group 'com.xebialabs.xlrelease.<%= kebabPluginName %>'
 
 <% if (xlrFeatures.indexOf('tiles') > -1) { %>
-task testJavaScript(type: NpmTask) {
+task testJavaScriptUnit(type: NpmTask) {
   args = ['test']
 }
+test.dependsOn testJavaScriptUnit
 
-test.dependsOn testJavaScript
+task testEnd2End(type: NpmTask, dependsOn: 'startXLRelease') {
+  args = ['run', 'protractor']
+}
+test.dependsOn testEnd2End
+
 <% } %>
-
 sourceSets.main.resources.srcDirs = ["src/main/jython", "src/main/resources"]
 sourceSets.test.resources.srcDirs = ["src/test/jython", "src/test/resources"]
 

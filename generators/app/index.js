@@ -163,7 +163,26 @@ module.exports = XlrGenerator.extend({
             if (this.xlrFeatures.indexOf('tiles') > -1) {
                 this.fs.copy(
                     this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.KARMA}/_karma.conf.js`),
-                    this.destinationPath('karma.conf.js')
+                    this.destinationPath('src/test/javascript/karma.conf.js')
+                );
+            }
+        },
+
+        // Protractor e2e test runner...
+        protractor: function () {
+            if (this.xlrFeatures.indexOf('tiles') > -1) {
+                this.fs.copy(
+                    this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.PROTRACTOR}/_protractor.conf.js`),
+                    this.destinationPath('src/test/javascript/protractor.conf.js')
+                );
+                this.fs.copy(
+                    this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.PROTRACTOR}/e2e/dsl/*`),
+                    this.destinationPath('src/test/javascript/e2e/dsl/')
+                );
+                this.fs.copyTpl(
+                    this.templatePath(`${CONSTANTS.APP_TEMPLATE_PATHS.PROTRACTOR}/e2e/scenario/startup-scenario.js`),
+                    this.destinationPath('src/test/javascript/e2e/scenario/startup-scenario.js'),
+                    { pluginName: this.pluginName }
                 );
             }
         },
@@ -187,6 +206,7 @@ module.exports = XlrGenerator.extend({
                     pluginName: this.pluginName,
                     xlrFeatures: this.xlrFeatures,
                     jsUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JS_UNIT,
+                    jsE2eTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E,
                     jythonUnitTestDir: CONSTANTS.PLUGIN_PATHS.TEST_JYTHON_UNIT
                 }
             );

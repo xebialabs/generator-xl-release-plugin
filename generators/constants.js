@@ -21,12 +21,14 @@ const BUILD = 'gradlebuild';
 const RESOURCES = 'resources';
 const NPM = 'npm';
 const KARMA = 'karma';
+const PROTRACTOR = 'protractor';
 const UNITTEST = 'unittest';
 const APP_TEMPLATE_PATHS = {
     BUILD,
     RESOURCES,
     NPM,
     KARMA,
+    PROTRACTOR,
     UNITTEST
 };
 
@@ -43,7 +45,9 @@ const TEST = path.join(SRC, 'test');
 const MAIN_RESOURCES = path.join(MAIN, 'resources');
 const TEST_JYTHON_UNIT = path.join(TEST, 'jython');
 const TEST_JYTHON_UNIT_RUNNER = path.join(TEST_JYTHON_UNIT, 'xlunittestrunner');
-const TEST_JS_UNIT = path.join(TEST, 'javascript', 'unit');
+const TEST_JS = path.join(TEST, 'javascript');
+const TEST_JS_UNIT = path.join(TEST_JS, 'unit');
+const TEST_JS_E2E = path.join(TEST_JS, 'e2e');
 const WEB = path.join(MAIN_RESOURCES, 'web');
 const WEB_INCLUDE = path.join(WEB, 'include');
 const PLUGIN_PATHS = {
@@ -52,7 +56,9 @@ const PLUGIN_PATHS = {
     WEB,
     WEB_INCLUDE,
     TEST,
+    TEST_JS,
     TEST_JS_UNIT,
+    TEST_JS_E2E,
     TEST_JYTHON_UNIT,
     TEST_JYTHON_UNIT_RUNNER
 };

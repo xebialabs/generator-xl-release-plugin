@@ -28,7 +28,11 @@ describe('XL Release plugin generator', function () {
             assert.file(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'synthetic.xml'));
             assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'));
             assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-rest-endpoints.xml'));
-            assert.noFile('karma.conf.js');
+            assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS, 'karma.conf.js'));
+            assert.noFile(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS, 'protractor.conf.js'));
+
+            assert.noFileContent('build.gradle', /[\s\S]*task testJavaScriptUnit[\s\S]*/);
+            assert.noFileContent('build.gradle', /[\s\S]*task testEnd2End[\s\S]*/);
         });
     });
 
@@ -36,17 +40,27 @@ describe('XL Release plugin generator', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withPrompts({
-                    pluginName: 'xlr-test-plugin',
+                    pluginName: 'XL Release Test Plugin',
+                    kebabPluginName: 'xlr-test-plugin',
                     namespace: 'test',
                     xlrFeatures: ['tiles', 'rest']
                 })
                 .on('end', done);
         });
 
-        it('should create extension XMLs', function () {
-            assert.file([path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'),
+        it('should create extension XMLs and UI test configuration', function () {
+            assert.file([
+                path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-ui-plugin.xml'),
                 path.join(CONSTANTS.PLUGIN_PATHS.MAIN_RESOURCES, 'xl-rest-endpoints.xml'),
-                'karma.conf.js']);
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS, 'karma.conf.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS, 'protractor.conf.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'dsl', 'fixtures.js'),
+                path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario', 'startup-scenario.js')
+            ]);
+            assert.fileContent('build.gradle', /[\s\S]*task testJavaScriptUnit[\s\S]*/);
+            assert.fileContent('build.gradle', /[\s\S]*task testEnd2End[\s\S]*/);
+            assert.fileContent(path.join(CONSTANTS.PLUGIN_PATHS.TEST_JS_E2E, 'scenario', 'startup-scenario.js'),
+                /[\s\S]*describe\('XL Release Test Plugin'[\s\S]*/);
         });
     });
 
