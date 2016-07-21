@@ -30,7 +30,7 @@ module.exports = XlrGenerator.extend({
             this.prompt({
                 type: 'input',
                 name: 'taskNamespace',
-                message: 'Task namespace',
+                message: 'Namespace',
                 default: this.namespace,
                 store: false
             }, (answers => {
@@ -115,8 +115,7 @@ module.exports = XlrGenerator.extend({
                 type: [
                     '',
                     `<type type="${this.taskNamespace}.${scriptName}" extends="${this.baseType}">`,
-                    '    <!-- Add task properties here -->',
-                    '    <property category="input" name="greetingName" kind="string" label="Your name" description="The name to say hello to." />',
+                    '    <property category="input"  name="greetingName" kind="string" label="Your name" description="The name to say hello to." />',
                     '    <property category="output" name="message" kind="string" description="The printed greeting." />',
                     '</type>'
                 ]

@@ -31,7 +31,7 @@ module.exports = XlrGenerator.extend({
             this.prompt({
                 type: 'input',
                 name: 'tileNamespace',
-                message: 'Tile namespace',
+                message: 'Namespace',
                 default: this.namespace,
                 store: false
             }, function (answers) {
@@ -59,7 +59,7 @@ module.exports = XlrGenerator.extend({
             this.prompt({
                 type: 'input',
                 name: 'tileLabel',
-                message: 'Tile label',
+                message: 'Label in UI',
                 store: false
             }, function (answers) {
                 this.tileLabel = answers.tileLabel;
@@ -198,8 +198,9 @@ module.exports = XlrGenerator.extend({
             '',
             `<type type="${this.tileNamespace}.${pascalTileName}" label="${this.tileLabel}" extends="xlrelease.Tile">`,
             `    <property name="uri" hidden="true" default="include/${this.tilePath}/${pascalTileName}/${kebabTileName}-summary-view.html" />`,
-            `    <property name="title" description="Display name of the tile" default="${this.tileLabel}"/>`,
-            '    <!-- Add tile properties here -->',
+            `    <property name="title" default="${this.tileLabel}"/>`,
+            '',
+            '    <!-- Customizable tile properties -->',
             '    <property category="input" name="greetingName" required="true" description="The name to say hello to." />',
             '</type>'
         ];

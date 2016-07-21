@@ -34,7 +34,7 @@ module.exports = XlrGenerator.extend({
             this.prompt({
                 type: 'input',
                 name: 'pluginName',
-                message: 'Your plugin name',
+                message: 'Plugin name',
                 default: _.kebabCase(this.appname),
                 store: true
             }, function (answers) {
@@ -49,7 +49,7 @@ module.exports = XlrGenerator.extend({
             this.prompt({
                 type: 'input',
                 name: 'namespace',
-                message: 'Default namespace'
+                message: 'Namespace (prefix for custom types)'
             }, function (answers) {
                 this.namespace = answers.namespace;
                 done();
@@ -63,13 +63,17 @@ module.exports = XlrGenerator.extend({
                 name: 'xlrFeatures',
                 message: 'What do you plan to develop as part of this plugin?',
                 choices: [{
+                    name: 'Tasks',
+                    value: 'tasks',
+                    checked: true
+                },{
                     name: 'Tiles',
                     value: 'tiles',
-                    checked: true
+                    checked: false
                 }, {
                     name: 'Custom REST endpoints',
                     value: 'rest',
-                    checked: true
+                    checked: false
                 }],
                 store: false
             }, function (answers) {

@@ -42,11 +42,11 @@ When developing you only need to restart XL Release server when you change `synt
 
 Position yourself in the root of the project then run:
 
-`yo xl-release-plugin:task`
+    yo xl-release-plugin:task
 
 You will be asked a series of questions regarding your new task:
 
-* `? Task namespace`
+* `? Namespace`
 * `? Task name`
 
 After answering all questions a basic file / folder structure will be created.
@@ -55,13 +55,13 @@ After answering all questions a basic file / folder structure will be created.
 
 Position yourself in the root of the project then run:
 
-`yo xl-release-plugin:tile`
+    yo xl-release-plugin:tile
 
 You will be asked a series of questions regarding your new task:
 
-* `? Tile namespace`
+* `? Namespace`
 * `? Tile name`
-* `? Tile label`
+* `? Label`
 * `? Use default controller?`
 * `? Add details view?`
 
@@ -124,24 +124,39 @@ xlr-greeting-plugin
 <% if (xlrFeatures.indexOf('tiles') > -1)  { %>
 Front end unit tests are run by [Karma](https://karma-runner.github.io) and written with [Jasmine](http://jasmine.github.io/). They are located in `<%= jsUnitTestDir %>` and can be run with:
 
-    `npm test` or `./gradlew testJavaScriptUnit`
+    npm test
+
+or
+
+     ./gradlew testJavaScriptUnit
     
 End-to-end tests are run by [Protractor](http://www.protractortest.org/) and are located in `<%= jsE2eTestDir %>`. They can be run with:
                                                                                             
-    `npm run protractor` or `./gradlew testEnd2End`
+    npm run protractor
+
+or
+
+     ./gradlew testEnd2End
+
 <% } %>
 
 Jython tests by default use [unittest](https://docs.python.org/2.7/library/unittest.html). They are located `<%= jythonUnitTestDir %>` and can be run with:
 
-    `./gradlew testJython`
+    ./gradlew testJython
 
 unittest uses predefined pattern for matching test files. By default it's `test*.py` but can be changed by editing the `runtests.py` script.
 
 ## <a name="building">Building
 
-This project uses the [gradle-git plugin](https://github.com/ajoberstar/gradle-git). The generated `build.gradle` contains commented out sections that configure the plugin. To be successfully able to build the project uncomment those lines and initialize a new Git repository and make an initial commit (if you haven't already). Now when building the project will contain a valid `plugin.version` field and can be droped into a XL Release distribution. To build the project run:
+This project uses the [gradle-git plugin](https://github.com/ajoberstar/gradle-git). The generated `build.gradle` contains commented out sections that configure the plugin.
 
-    `./gradlew build`
+To be successfully able to build the project uncomment those lines and initialize a new Git repository and make an initial commit. (GitHub has a help page [Adding an existing project to GitHub using the command line](https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/))
+
+Now the project will contain a valid `plugin.version` field and can be dropped into an XL Release distribution.
+
+To build the project run:
+
+    ./gradlew build
 
 ## Releasing
 

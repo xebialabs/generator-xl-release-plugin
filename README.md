@@ -22,12 +22,12 @@ Position yourself into an empty folder, then run:
 
 You will be asked a series of questions regarding your new plugin:
 
-* `? Your plugin name`
-* `? Default namespace`
+* `? Plugin name`
+* `? Namespace (prefix for custom types)`
 * `? Generate additional extensions XMLs?`
 * `? Which test frameworks to use?`
 
-After answering all questions a basic plugin will be created. 
+After answering these questions a basic plugin will be created.
 
 Depending on the features previously selected the newly generated plugin may or may not contain the following test frameworks:
 
@@ -42,8 +42,8 @@ Position yourself into a previously generated plugin folder, then run:
 
 You will be asked a series of questions regarding your new task:
 
+* `? Namespace`
 * `? Task name`
-* `? Task namespace`
 
 After answering all questions a basic file / folder structure will be created.
 
@@ -55,9 +55,9 @@ Position yourself into a previously generated plugin folder, then run:
 
 You will be asked a series of questions regarding your new task:
 
-* `? Your tile name`
-* `? Tile namespace`
-* `? Tile label`
+* `? Namespace`
+* `? Tile name`
+* `? Label`
 * `? Add details view?`
 
 After answering all questions a basic file / folder structure will be created.
