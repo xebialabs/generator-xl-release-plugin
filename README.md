@@ -66,6 +66,18 @@ After answering all questions a basic file / folder structure will be created.
 
 This project uses [Gradle Plugin for XL Release](https://github.com/xebialabs/gradle-xl-release-plugin-plugin). Configuration and usage details can be found at the projects repo [readme](https://github.com/xebialabs/gradle-xl-release-plugin-plugin/blob/master/README.md).
 
+
+## Docker
+
+* Advantage: no local install of yeoman or node needed. And you can easily release a new version by sending it to docker hub.
+* How to use
+  * Run `docker build -t xebialabs/generator-xlr-plugin .` to install the image local (not needed if we push this to Docker hub).
+  * Go to the directory you want to run the generator for (for example `/tmp/xlr-something-plugin`)
+  * Run `docker run -v /tmp/xlr-something:/data -i -t xebialabs/generator-xlr-plugin`
+* Issues: 
+  * It still needs to download a lot of stuff, so that might be added to the image in advance. 
+  * Also `node_modules` gets installed in that directory. Not sure if that is what is expected.
+
 ## Notes
 
 * When using Jython if you receive an `ImportError: no module named` message, make sure your modules are not inside a package named `test`
