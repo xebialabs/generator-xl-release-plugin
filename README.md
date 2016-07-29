@@ -73,7 +73,9 @@ This project uses [Gradle Plugin for XL Release](https://github.com/xebialabs/gr
 * How to use
   * Run `docker build -t xebialabs/generator-xlr-plugin .` to install the image local (not needed if we push this to Docker hub).
   * Go to the directory you want to run the generator for (for example `/tmp/xlr-something-plugin`)
-  * Run `docker run -v /tmp/xlr-something:/data -i -t xebialabs/generator-xlr-plugin`
+  * Run `docker run -v /tmp/xlr-something:/data -i -t xebialabs/generator-xlr-plugin` to create a new plugin.
+  * Run `docker run -v /tmp/xlr-something:/data -i -t xebialabs/generator-xlr-plugin xl-release-plugin:task` to create a new task.
+  * Run `docker run -v /tmp/xlr-something:/data -i -t xebialabs/generator-xlr-plugin xl-release-plugin:tile` to create a new tile.
 * Issues: 
   * It still needs to download a lot of stuff, so that might be added to the image in advance. 
   * Also `node_modules` gets installed in that directory. Not sure if that is what is expected.

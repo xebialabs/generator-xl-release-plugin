@@ -17,6 +17,6 @@ USER yeoman
 
 VOLUME /data
 WORKDIR /data
-
-CMD ["yo","xl-release-plugin"]
+ENTRYPOINT ["yo"]
+CMD ["xl-release-plugin"]
 
